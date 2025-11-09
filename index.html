@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elizade Toyota Ai Assistant</title>
+  <style>
+    :root{--red:#d32f2f;--yellow:#f5c142;--white:#ffffff;--bg:#111}
+  body{font-family:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#220000 0%, #110000 100%);color:var(--white);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .assistant{width:720px;border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.6);background:linear-gradient(180deg,var(--red),#8b0000)}
+  .header{padding:14px 18px;background:linear-gradient(90deg,var(--red),#b71c1c);display:flex;align-items:center;gap:14px;flex-direction:column}
+  .brand{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .brand h2{margin:0;font-size:20px;color:var(--white)}
+  .brand p{margin:0;font-size:13px;color:rgba(255,255,255,0.95)}
+  .carousel{width:100%;max-width:680px;height:160px;border-radius:8px;overflow:hidden;margin-top:10px;background:linear-gradient(180deg,#fff,#fff);display:flex;align-items:center;justify-content:center}
+  .carousel img{max-width:100%;max-height:100%;display:block;transition:opacity 420ms ease}
+  .body{background:linear-gradient(180deg,#fff 0%, #fff 100%);color:#111;padding:16px;height:560px;display:flex;flex-direction:column}
+  .transcript{flex:1;overflow:auto;border-radius:10px;padding:12px;background:linear-gradient(180deg,#fff,#fff);box-shadow:inset 0 1px 0 rgba(0,0,0,0.04)}
+    .msg{margin:10px 0;display:flex;gap:10px;align-items:flex-end}
+    .msg.user{justify-content:flex-end}
+    .avatar{width:40px;height:40px;border-radius:10px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;background:#fff;color:#b71c1c;font-weight:800}
+  .bubble{display:inline-block;padding:14px 16px;border-radius:14px;max-width:78%;box-shadow:0 6px 18px rgba(12,18,30,0.06);transform-origin:left bottom}
+    .bubble.bot{background:linear-gradient(90deg,var(--yellow),#ffd86b);color:#111}
+    .bubble.user{background:#f1f5f9;color:#111}
+    .bubble.fade-in{animation:popIn 260ms ease}
+    @keyframes popIn{from{opacity:0;transform:scale(0.98) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)}}
+    .chat-us{margin-left:8px;background:#25D366;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 12px rgba(37,211,102,0.18)}
+    .controls{display:flex;gap:8px;margin-top:10px}
+    .btn{flex:1;padding:12px;border-radius:12px;border:0;cursor:pointer;font-weight:800}
+    .btn.mic{background:var(--white);color:#b71c1c}
+    .btn.ask{background:var(--yellow);color:#111}
+    .note{font-size:12px;color:#222;margin-top:8px}
+  .footer{padding:12px 16px;background:#0b0b0b;color:rgba(255,255,255,0.95);font-size:13px;text-align:center}
+    .small{font-size:12px;color:rgba(0,0,0,0.6)}
+  </style>
+</head>
+<body>
+  <div class="assistant" role="application" aria-label="Elizade Toyota Assistant">
+    <div class="header">
+      <div style="display:flex;align-items:center;gap:12px;">
+  <img src="https://media.glassdoor.com/sqll/693311/elizade-toyota-squarelogo-1528867890405.png" alt="Elizade Toyota" style="width:64px;height:64px;border-radius:12px;background:var(--white);object-fit:contain;padding:6px;box-shadow:0 2px 6px rgba(0,0,0,0.2)" />
+        <div class="brand">
+          <h2>Elizade Toyota Ai Assistant</h2>
+          <p>Your trusted mobility partner — ask me about models, prices, parts, or bookings</p>
+        </div>
+      </div>
+      <div style="width:100%;margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button id="ask" class="btn ask" style="min-width:120px">Website</button>
+        <button id="qrModels" class="btn" style="background:#fff;color:#b71c1c;min-width:120px">Models</button>
+        <button id="qrParts" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Parts</button>
+  <button id="qrBook" class="btn" style="background:#fff;color:#b71c1c;min-width:160px">Fleet Info</button>
+  <button id="qrContact" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Chat Us</button>
+      </div>
+      <div class="carousel" aria-hidden="false"><img id="carImg" src="" alt="Car image"/></div>
+    </div>
+    <div class="body">
+      <div id="transcript" class="transcript" aria-live="polite"></div>
+
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <button id="mic" class="btn mic" style="flex:0 0 56px;padding:10px">🎤</button>
+        <input id="input" type="text" placeholder="Type your question (e.g. price of RAV4)" style="flex:1;padding:12px;border-radius:8px;border:1px solid #e6e6e6" />
+        <button id="send" class="btn" style="background:#fff;color:#111">Send</button>
+      </div>
+      <div class="note">Tip: Use the mic button to speak. Click responses to hear them again.</div>
+    </div>
+    <div class="footer">DEVELOPED BY I.TEC GLOBAL</div>
+  </div>
+
+  <script>
+    // Data & snippets based on provided content
+    const INFO = {
+      name: 'Elizade Toyota Nigeria',
+      phone: '+2348123456789',
+      email: 'support@elizade.com',
+      website: 'https://elizade.net',
+      highlights: [
+        'Genuine Toyota Vehicles & Parts Only',
+        'Affordable Financing and Leasing Options',
+        'Nationwide After-Sales & Maintenance',
+        'Strong Resale Value and Warranty',
+        'Corporate Fleet Solutions and Car Subscription Plans',
+        'Online Vehicle and Spare Parts Ordering',
+        'Fast Customer Service Response'
+      ],
+      models: {
+        'corolla': 'Toyota Corolla — reliable sedan, fuel efficient. Price range: 23M to 35M naira.',
+        'camry': 'Toyota Camry — executive sedan with comfort and power. Price range: 35M to 55M naira.',
+        'yaris': 'Toyota Yaris — compact city-friendly. Price range: 18M to 28M naira.',
+        'rav4': 'Toyota RAV4 — best-selling city SUV. Price range: 38M to 60M naira.',
+        'highlander': 'Toyota Highlander — family SUV, spacious luxury. Price range: 58M to 90M naira.',
+        'prado': 'Toyota Land Cruiser Prado — premium off-road SUV. Price range: 85M to 130M naira.',
+        'lc300': 'Toyota Land Cruiser 300 — flagship luxury SUV. Price range: 180M to 350M naira.',
+        'hilux': 'Toyota Hilux — tough pickup for work & business. Price range: 45M to 110M naira.',
+        'hiace': 'Toyota Hiace — transport and corporate mobility. Price range: 50M to 100M naira.',
+        'sienna': 'Toyota Sienna — family and shuttle solution. Price range: 40M to 75M naira.',
+        'avensis': 'Toyota Avensis (limited stock) — luxury design & comfort. Price range: 25M to 40M naira.'
+      }
+    };
+
+    const transcriptEl = document.getElementById('transcript');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    const micBtn = document.getElementById('mic');
+    const askBtn = document.getElementById('ask');
+    const carImg = document.getElementById('carImg');
+
+    // Inline SVG car images (no external network). We'll cycle through them.
+    function svgDataUrl(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
+    // Use the external image links provided by the user
+    const CAR_SVGS = [
+      'https://www.dubicars.com/images/a8c76b/r_960x540/generations/generation_65b9560b5619b_jetour-traveler-8.jpg?6',
+      'https://toyotaconnect.co.za/wp-content/uploads/2022/07/Toyota_1stcar_slider_1440x600_03.jpg',
+      'https://us-tuna-sounds-images.voicemod.net/889de82f-55d3-4a05-8140-21a625fc229b-1666240948303.jpg',
+      'https://toyotaghana.com/wp-content/uploads/2021/10/corolla-cross-hero-desktop.jpg',
+    ];
+
+    let carIndex = 0;
+    function showRandomCar(){
+      carIndex = (carIndex + 1) % CAR_SVGS.length;
+      const prev = carImg.style.opacity;
+      carImg.style.opacity = 0; // fade out
+      setTimeout(()=>{ carImg.src = CAR_SVGS[carIndex]; carImg.style.opacity = 1; }, 220);
+    }
+    // initialize
+    carImg.src = CAR_SVGS[0]; carImg.style.opacity = 1;
+    setInterval(showRandomCar, 4000);
+
+    const WA_LINK = 'https://wa.link/6199n8';
+
+    function appendMessage(text, who='bot'){
+      const wrap = document.createElement('div'); wrap.className = 'msg ' + (who==='user' ? 'user' : '');
+
+      if(who === 'user'){
+        const b = document.createElement('span'); b.className = 'bubble user fade-in';
+        b.textContent = text; b.title = 'Click to hear this message'; b.style.cursor='pointer';
+        b.addEventListener('click', ()=> speak(text));
+        wrap.appendChild(b);
+      } else {
+        // bot message: avatar + bubble + Chat Us button
+        const av = document.createElement('div'); av.className = 'avatar';
+        const logo = document.createElement('img'); logo.src = 'https://media.glassdoor.com/sqll/693311/elizade-toyota-squarelogo-1528867890405.png';
+        logo.alt = 'ET'; logo.style.width='28px'; logo.style.height='28px'; logo.style.objectFit='contain';
+        av.appendChild(logo);
+
+        const content = document.createElement('div'); content.style.display='flex'; content.style.alignItems='center';
+        const b = document.createElement('span'); b.className = 'bubble bot fade-in'; b.textContent = text; b.title='Click to hear this message'; b.style.cursor='pointer';
+        b.addEventListener('click', ()=> speak(text));
+        const btn = document.createElement('button'); btn.className='chat-us'; btn.textContent='Chat Us';
+        btn.addEventListener('click', ()=>{
+          try{ const nw = window.open(WA_LINK, '_blank'); if(!nw) appendMessage('Popup blocked — please allow popups to start WhatsApp chat.'); }catch(e){ console.warn('open wa', e); }
+        });
+        content.appendChild(b); content.appendChild(btn);
+
+        wrap.appendChild(av); wrap.appendChild(content);
+      }
+
+      transcriptEl.appendChild(wrap);
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+    }
+
+    function speak(text){
+      if(!('speechSynthesis' in window)) return;
+      const s = new SpeechSynthesisUtterance(String(text));
+      // prefer female voice if available
+      const voices = speechSynthesis.getVoices();
+      const preferred = voices.find(v => /female|woman|zira|susan|kendra/i.test(v.name)) || voices.find(v=>/en-US|english/i.test(v.lang)) || voices[0];
+      if(preferred) s.voice = preferred;
+      s.rate = 1;
+      s.pitch = 1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(s);
+    }
+
+    // Very small rule-based agent using keywords
+    function handleQuery(text){
+      const t = (text||'').toLowerCase();
+      appendMessage(text, 'user');
+
+      // greetings
+      if(/hello|hi\b|hey|good morning|good afternoon|good evening/.test(t)){
+        const r = `Hello! Welcome to ${INFO.name}. I can help with model prices, parts, service, test drives and online orders. How can I help you today?`;
+        appendMessage(r);
+        speak(r);
+        return;
+      }
+
+      // contact
+      if(/contact|phone|call|support|email|whatsapp/.test(t)){
+        const r = `You can reach Elizade Toyota at ${INFO.phone} or email ${INFO.email}. WhatsApp: +234 810 000 0000. Visit ${INFO.website} for online ordering.`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // models/prices
+      for(const k of Object.keys(INFO.models)){
+        if(t.includes(k) || t.includes(k.replace(/[^a-z]/g,''))){
+          const r = INFO.models[k]; appendMessage(r); speak(r); return;
+        }
+      }
+
+      if(/models|cars|vehicles|which models|available models/.test(t)){
+        const list = Object.keys(INFO.models).map(m=> m.toUpperCase()).join(', ');
+        const r = `Available models include: ${list}. Ask for a specific model for price range.`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // parts
+      if(/part|spare|brake|battery|tyre|filter|accessor/i.test(t)){
+        const r = `We provide genuine Toyota spare parts and accessories including brakes, oil filters, batteries, tyres, AC components and body parts. You can order parts or tell me which part you need and I'll help.`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // service
+      if(/service|maintenance|repair|warranty|inspection/.test(t)){
+        const r = `Elizade Toyota offers nationwide after-sales service, warranty repairs, preventive and body shop repairs. We also have Toyota Care+ memberships and free inspection days. Would you like to schedule a service or request a quote?`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // booking/test drive
+      if(/test drive|test-drive|book|booking|schedule/.test(t)){
+        const r = `I can help schedule a test drive. Please provide your name, preferred model and preferred date/time, and one of our agents will confirm.`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // order intent
+      if(/order|buy|purchase|finance|lease/.test(t)){
+        const r = `You can order vehicles online via ${INFO.website}. We also offer financing and leasing options. Tell me which model you're interested in and I will provide next steps.`;
+        appendMessage(r); speak(r); return;
+      }
+
+      // fallback with short brand pitch
+      const r = `Elizade Toyota has been Nigeria's trusted Toyota distributor for over 50 years. We offer genuine Toyota vehicles, nationwide service, and online ordering. Ask me about a model name, parts or how to book a test drive.`;
+      appendMessage(r); speak(r);
+    }
+
+    sendBtn.addEventListener('click', ()=>{ const v = inputEl.value.trim(); if(!v) return; handleQuery(v); inputEl.value=''; });
+    // Replace Ask behavior: open Elizade website and also try to load it in a hidden iframe (background)
+    askBtn.addEventListener('click', ()=>{
+      try{
+        const nw = window.open(INFO.website, '_blank');
+        if(!nw) alert('Popup blocked. Please allow popups to open the website.');
+      }catch(e){ console.warn('Could not open website', e); }
+    });
+
+    // attempt to preload the website in a hidden iframe so it runs in background (may be blocked by X-Frame-Options)
+    (function preloadBackgroundSite(){
+      try{
+        const iframe = document.createElement('iframe');
+        iframe.id = 'bgSite';
+        iframe.src = INFO.website;
+        iframe.style.position = 'absolute';
+        iframe.style.width = '1px'; iframe.style.height = '1px';
+        iframe.style.left = '-9999px'; iframe.style.top = '-9999px'; iframe.style.border = '0';
+        iframe.onload = ()=> console.log('Background site loaded in iframe');
+        iframe.onerror = ()=> console.warn('Background iframe failed to load (likely blocked)');
+        document.body.appendChild(iframe);
+        // check after a short timeout whether iframe loaded contentDocument (may be null if blocked)
+        setTimeout(()=>{
+          try{
+            const doc = iframe.contentDocument || iframe.contentWindow && iframe.contentWindow.document;
+            if(!doc) console.warn('Iframe likely blocked or cross-origin');
+          }catch(err){ console.warn('Iframe access error (expected for cross-origin)', err); }
+        }, 2000);
+      }catch(e){ console.warn('preloadBackgroundSite error', e); }
+    })();
+
+    // SpeechRecognition (browser support varies)
+    let recognizing = false;
+    let recognition = null;
+    if(window.SpeechRecognition || window.webkitSpeechRecognition){
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
+      recognition.lang = 'en-NG';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = ()=>{ recognizing = true; micBtn.textContent = '🔴 Listening...'; micBtn.style.background = '#fff'; };
+      recognition.onend = ()=>{ recognizing = false; micBtn.textContent = '🎤 Hold to Speak'; micBtn.style.background = ''; };
+      recognition.onresult = (ev)=>{
+        const text = ev.results[0][0].transcript;
+        handleQuery(text);
+      };
+      recognition.onerror = (ev)=>{ console.warn('Speech recognition error', ev); appendMessage('Voice recognition error: ' + (ev.error || 'unknown')); };
+    } else {
+      micBtn.disabled = false; // keep enabled but show notice
+    }
+
+    // mic button — tap to start/stop
+    micBtn.addEventListener('click', ()=>{
+      if(!recognition){ appendMessage('Voice input is not supported in this browser. Try Chrome or Edge.'); return; }
+      if(recognizing){ recognition.stop(); }
+      else{ recognition.start(); }
+    });
+
+    // Quick-reply button handlers
+    document.getElementById('qrModels').addEventListener('click', ()=>{
+      const list = Object.keys(INFO.models).map(m=> `${m.toUpperCase()}: ${INFO.models[m]}`).join('\n');
+      const r = `Available models and ranges:\n${list}`;
+      appendMessage(r); speak(r);
+    });
+
+    document.getElementById('qrParts').addEventListener('click', ()=>{
+      const r = `We provide genuine Toyota spare parts: brakes, oil filters, batteries, tyres, AC components, body parts and luxury accessories. You can order parts at ${INFO.website}/parts or tell me which part you need.`;
+      appendMessage(r); speak(r);
+    });
+
+    document.getElementById('qrContact').addEventListener('click', ()=>{
+      const waUrl = 'https://wa.link/6199n8';
+      const r = `Opening WhatsApp chat for Elizade Toyota. If a new tab does not open, please click this link: ${waUrl}`;
+      appendMessage(r); speak(r);
+      try{ const nw = window.open(waUrl, '_blank'); if(!nw) appendMessage('Popup blocked. Please allow popups to open WhatsApp.'); }catch(e){ console.warn('open wa link error', e); }
+      // attempt to preload in hidden iframe (may be blocked by target headers)
+      try{
+        const id = 'bgChatFrame'; if(!document.getElementById(id)){
+          const iframe = document.createElement('iframe'); iframe.id = id; iframe.src = waUrl; iframe.style.position='absolute'; iframe.style.width='1px'; iframe.style.height='1px'; iframe.style.left='-9999px'; iframe.style.top='-9999px'; iframe.style.border='0';
+          iframe.onload = ()=> console.log('Background WhatsApp iframe loaded');
+          iframe.onerror = ()=> console.warn('Background WhatsApp iframe failed to load');
+          document.body.appendChild(iframe);
+          setTimeout(()=>{ try{ const doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document); if(!doc) console.warn('WhatsApp iframe likely blocked or cross-origin'); }catch(err){ console.warn('iframe access error', err); } }, 1500);
+        }
+      }catch(err){ console.warn('preload wa iframe error', err); }
+    });
+
+    document.getElementById('qrBook').addEventListener('click', ()=>{
+      // Fleet info quick response
+      const msg = `Fleet Solutions — Designed for organizations with multiple vehicles, enabling them to optimize cost, improve safety, and extend vehicle lifespan.`;
+      appendMessage(msg); speak(msg);
+    });
+
+    // send booking to server /api/book
+    async function sendBooking(booking){
+      try{
+        const resp = await fetch('/api/book', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(booking) });
+        if(!resp.ok) throw new Error('Server error: ' + resp.status);
+        const data = await resp.json();
+        return data;
+      }catch(e){
+        console.warn('sendBooking error', e);
+        // fallback: store in localStorage queue
+        try{
+          const queue = JSON.parse(localStorage.getItem('elizade_bookings')||'[]'); queue.push(Object.assign({ts: Date.now()}, booking)); localStorage.setItem('elizade_bookings', JSON.stringify(queue));
+        }catch(err){ console.warn('local fallback failed', err); }
+        return null;
+      }
+    }
+
+    // Greeting messages - pick one at random and read it aloud (prefer female voice)
+    const GREETINGS = [
+      `You\u2019re in safe hands with Elizade Toyota. I\'m here to help you find the right Toyota, maintain your vehicle, or get support anytime. How can I serve you today?`,
+      `Welcome to Elizade Toyota \u2014 where your journey matters. I\'m here to guide you with the perfect Toyota, genuine parts, and expert support.`,
+      `Thanks for choosing Elizade Toyota!  Whether you\'d like to explore new cars, book service, or request pricing \u2014 I\'ve got you covered. What can I do for you today?`
+    ];
+
+    function getRandomGreeting(){ return GREETINGS[Math.floor(Math.random()*GREETINGS.length)]; }
+
+    function speakWithFemale(text){
+      if(!('speechSynthesis' in window)) return;
+      const speakNow = ()=>{
+        const s = new SpeechSynthesisUtterance(String(text));
+        const voices = speechSynthesis.getVoices() || [];
+        // Prefer female-sounding names commonly available
+        const femaleRegex = /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i;
+        let preferred = voices.find(v=> femaleRegex.test(v.name));
+        if(!preferred) preferred = voices.find(v=> /en-US|en-GB|english/i.test(v.lang));
+        if(preferred) s.voice = preferred;
+        s.rate = 1; s.pitch = 1;
+        speechSynthesis.cancel(); speechSynthesis.speak(s);
+      };
+      // voices may not be loaded immediately
+      if((speechSynthesis.getVoices()||[]).length === 0){
+        speechSynthesis.onvoiceschanged = ()=> speakNow();
+        // also attempt after short delay
+        setTimeout(()=>{ if((speechSynthesis.getVoices()||[]).length) speakNow(); }, 250);
+      } else speakNow();
+    }
+
+    function playGreeting(){
+      const g = getRandomGreeting();
+      appendMessage(g, 'bot');
+      speakWithFemale(g);
+    }
+
+    // Play greeting immediately on load
+    playGreeting();
+
+    // Accessibility: allow Enter to send
+    inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendBtn.click(); } });
+  </script>
+</body>
+</html>
