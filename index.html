@@ -3,19 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
   <title>Elizade Toyota Ai Assistant</title>
   <style>
     :root{--red:#d32f2f;--yellow:#f5c142;--white:#ffffff;--bg:#111}
-  body{font-family:"Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#220000 0%, #110000 100%);color:var(--white);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  body{font-family:Avenir, 'Nunito', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#220000 0%, #110000 100%);color:var(--white);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
   .assistant{width:720px;border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.6);background:linear-gradient(180deg,var(--red),#8b0000)}
   .header{padding:14px 18px;background:linear-gradient(90deg,var(--red),#b71c1c);display:flex;align-items:center;gap:14px;flex-direction:column}
   .brand{display:flex;flex-direction:column;align-items:center;text-align:center}
   .brand h2{margin:0;font-size:20px;color:var(--white)}
   .brand p{margin:0;font-size:13px;color:rgba(255,255,255,0.95)}
-  .carousel{width:100%;max-width:680px;height:160px;border-radius:8px;overflow:hidden;margin-top:10px;background:linear-gradient(180deg,#fff,#fff);display:flex;align-items:center;justify-content:center}
-  .carousel img{max-width:100%;max-height:100%;display:block;transition:opacity 420ms ease}
+  .carousel{width:100%;max-width:680px;height:160px;border-radius:8px;overflow:hidden;margin-top:10px;position:relative;background:#000}
+  .carousel-inner{height:100%;display:flex;transition:transform 600ms ease;will-change:transform}
+  .carousel-inner img{flex:0 0 100%;width:100%;height:100%;min-width:100%;min-height:100%;object-fit:contain;display:block;padding:8px;box-sizing:border-box;background:#000;align-self:center}
+  .carousel-control{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+  .carousel-control.prev{left:10px}
+  .carousel-control.next{right:10px}
+  .carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;display:flex;gap:8px}
+  .carousel-dots button{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,0.45);cursor:pointer}
+  .carousel-dots button.active{background:#fff}
   .body{background:linear-gradient(180deg,#fff 0%, #fff 100%);color:#111;padding:16px;height:560px;display:flex;flex-direction:column}
-  .transcript{flex:1;overflow:auto;border-radius:10px;padding:12px;background:linear-gradient(180deg,#fff,#fff);box-shadow:inset 0 1px 0 rgba(0,0,0,0.04)}
+  .transcript{flex:1;overflow:auto;border-radius:10px;padding:12px;background:rgba(255,255,255,0.85);box-shadow:inset 0 1px 0 rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.06);color:#111;backdrop-filter: blur(6px)}
     .msg{margin:10px 0;display:flex;gap:10px;align-items:flex-end}
     .msg.user{justify-content:flex-end}
     .avatar{width:40px;height:40px;border-radius:10px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;background:#fff;color:#b71c1c;font-weight:800}
@@ -26,6 +34,20 @@
     @keyframes popIn{from{opacity:0;transform:scale(0.98) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)}}
     .chat-us{margin-left:8px;background:#25D366;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 12px rgba(37,211,102,0.18)}
     .controls{display:flex;gap:8px;margin-top:10px}
+  /* Quick Fix sections / TOC */
+  .quickfix-toc{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:rgba(255,255,255,0.92);border-radius:8px;margin-bottom:8px}
+  .quickfix-toc button{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:6px 8px;border-radius:8px;cursor:pointer}
+  .section{margin:8px 0}
+  .section-header{display:flex;align-items:center;gap:8px;cursor:pointer}
+  .section-title{font-weight:800}
+  .section-toggle{margin-left:auto;background:transparent;border:1px solid rgba(0,0,0,0.06);padding:4px 8px;border-radius:6px;cursor:pointer}
+  .section-content{overflow:hidden;max-height:0;transition:max-height 260ms ease;padding-top:6px}
+  .section-pre{white-space:pre-wrap;background:transparent;padding:6px;border-radius:6px;color:#111}
+  .hidden-container{display:flex;flex-direction:column;gap:6px;padding:8px 6px}
+  .hidden-msg{opacity:0.6;font-size:13px;color:#333;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);cursor:pointer}
+  .history-open .hidden-container{display:block}
+  /* hide overlay arrows on carousel */
+  .carousel-control{display:none}
     .btn{flex:1;padding:12px;border-radius:12px;border:0;cursor:pointer;font-weight:800}
     .btn.mic{background:var(--white);color:#b71c1c}
     .btn.ask{background:var(--yellow);color:#111}
@@ -49,12 +71,25 @@
         <button id="qrModels" class="btn" style="background:#fff;color:#b71c1c;min-width:120px">Models</button>
         <button id="qrParts" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Parts</button>
   <button id="qrBook" class="btn" style="background:#fff;color:#b71c1c;min-width:160px">Fleet Info</button>
-  <button id="qrContact" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Chat Us</button>
+  <button id="qrContact" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Quick Fix</button>
       </div>
-      <div class="carousel" aria-hidden="false"><img id="carImg" src="" alt="Car image"/></div>
+      <div class="carousel" aria-hidden="false">
+        <button class="carousel-control prev" aria-label="Previous">‹</button>
+        <div class="carousel-inner" id="carouselInner"></div>
+        <button class="carousel-control next" aria-label="Next">›</button>
+        <div class="carousel-dots" id="carouselDots" aria-hidden="false"></div>
+      </div>
     </div>
     <div class="body">
-      <div id="transcript" class="transcript" aria-live="polite"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
+        <button id="historyBtn" class="btn secondary" style="flex:0 0 auto">History (0)</button>
+        <div id="userCount" class="small" style="flex:0 0 auto">Users online: 1</div>
+      </div>
+      <div id="transcript" class="transcript" aria-live="polite">
+        <div id="quickFixContainerHolder"></div>
+        <div id="visibleArea"></div>
+        <div id="hiddenArea" class="hidden-container" style="display:none"></div>
+      </div>
 
       <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
         <button id="mic" class="btn mic" style="flex:0 0 56px;padding:10px">🎤</button>
@@ -102,32 +137,76 @@
     const sendBtn = document.getElementById('send');
     const micBtn = document.getElementById('mic');
     const askBtn = document.getElementById('ask');
-    const carImg = document.getElementById('carImg');
+    const carouselInner = document.getElementById('carouselInner');
 
-    // Inline SVG car images (no external network). We'll cycle through them.
-    function svgDataUrl(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
     // Use the external image links provided by the user
-    const CAR_SVGS = [
-      'https://www.dubicars.com/images/a8c76b/r_960x540/generations/generation_65b9560b5619b_jetour-traveler-8.jpg?6',
-      'https://toyotaconnect.co.za/wp-content/uploads/2022/07/Toyota_1stcar_slider_1440x600_03.jpg',
-      'https://us-tuna-sounds-images.voicemod.net/889de82f-55d3-4a05-8140-21a625fc229b-1666240948303.jpg',
-      'https://toyotaghana.com/wp-content/uploads/2021/10/corolla-cross-hero-desktop.jpg',
+    const CAR_IMAGES = [
+      { local: 'assets/slide1.jpg', remote: 'https://www.dubicars.com/images/a8c76b/r_960x540/generations/generation_65b9560b5619b_jetour-traveler-8.jpg?6' },
+      { local: 'assets/slide2.jpg', remote: 'https://toyotaconnect.co.za/wp-content/uploads/2022/07/Toyota_1stcar_slider_1440x600_03.jpg' },
+      { local: 'assets/slide3.jpg', remote: 'https://us-tuna-sounds-images.voicemod.net/889de82f-55d3-4a05-8140-21a625fc229b-1666240948303.jpg' },
+      { local: 'assets/auto-repair.jpg', remote: 'https://wtop.com/wp-content/uploads/2018/11/auto-repair.jpg' }
     ];
 
+    // build slides and dots
+    const dotsContainer = document.getElementById('carouselDots');
+    CAR_IMAGES.forEach((item, i) =>{
+      const img = document.createElement('img'); img.alt = 'Car image';
+      // try local first, fallback to remote if local fails
+      img.src = item.local;
+      img.onerror = ()=>{ img.onerror = null; img.src = item.remote; };
+      carouselInner.appendChild(img);
+
+      const dot = document.createElement('button'); dot.setAttribute('aria-label', 'Slide '+(i+1));
+      if(i===0) dot.classList.add('active');
+      dot.addEventListener('click', ()=>{ slideTo(i); });
+      dotsContainer.appendChild(dot);
+    });
+
     let carIndex = 0;
-    function showRandomCar(){
-      carIndex = (carIndex + 1) % CAR_SVGS.length;
-      const prev = carImg.style.opacity;
-      carImg.style.opacity = 0; // fade out
-      setTimeout(()=>{ carImg.src = CAR_SVGS[carIndex]; carImg.style.opacity = 1; }, 220);
+    function updateDots(){
+      const dots = dotsContainer.children;
+      for(let j=0;j<dots.length;j++) dots[j].classList.toggle('active', j===carIndex);
     }
-    // initialize
-    carImg.src = CAR_SVGS[0]; carImg.style.opacity = 1;
-    setInterval(showRandomCar, 4000);
+
+    function slideTo(index){
+      const n = CAR_IMAGES.length;
+      if(n === 0) return;
+      index = ((index % n) + n) % n;
+      carouselInner.style.transform = `translateX(${ -index * 100 }%)`;
+      carIndex = index;
+      updateDots();
+    }
+
+    // controls
+    document.querySelector('.carousel-control.prev').addEventListener('click', ()=> slideTo(carIndex-1));
+    document.querySelector('.carousel-control.next').addEventListener('click', ()=> slideTo(carIndex+1));
+
+    // auto-advance
+    let slideInterval = setInterval(()=> slideTo(carIndex + 1), 4000);
+    // pause on hover
+    const carousel = document.querySelector('.carousel');
+    carousel.addEventListener('mouseenter', ()=> clearInterval(slideInterval));
+    carousel.addEventListener('mouseleave', ()=> { clearInterval(slideInterval); slideInterval = setInterval(()=> slideTo(carIndex + 1), 4000); });
+
+    // keyboard support
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'ArrowLeft') slideTo(carIndex-1); if(e.key === 'ArrowRight') slideTo(carIndex+1); });
+
+    // start at first slide
+    slideTo(0);
 
     const WA_LINK = 'https://wa.link/6199n8';
 
     function appendMessage(text, who='bot'){
+      // Keep only the Quick Fix TOC (if present), remove older chat so only the newest chat shows
+      const existingQF = document.getElementById('quickFixContainer');
+      if(existingQF){
+        // detach and re-attach after clearing
+        existingQF.remove();
+      }
+      // clear previous messages
+      transcriptEl.innerHTML = '';
+      if(existingQF){ transcriptEl.appendChild(existingQF); }
+
       const wrap = document.createElement('div'); wrap.className = 'msg ' + (who==='user' ? 'user' : '');
 
       if(who === 'user'){
@@ -142,10 +221,10 @@
         logo.alt = 'ET'; logo.style.width='28px'; logo.style.height='28px'; logo.style.objectFit='contain';
         av.appendChild(logo);
 
-        const content = document.createElement('div'); content.style.display='flex'; content.style.alignItems='center';
+          const content = document.createElement('div'); content.style.display='flex'; content.style.alignItems='center';
         const b = document.createElement('span'); b.className = 'bubble bot fade-in'; b.textContent = text; b.title='Click to hear this message'; b.style.cursor='pointer';
         b.addEventListener('click', ()=> speak(text));
-        const btn = document.createElement('button'); btn.className='chat-us'; btn.textContent='Chat Us';
+          const btn = document.createElement('button'); btn.className='chat-us'; btn.textContent='Chat Us';
         btn.addEventListener('click', ()=>{
           try{ const nw = window.open(WA_LINK, '_blank'); if(!nw) appendMessage('Popup blocked — please allow popups to start WhatsApp chat.'); }catch(e){ console.warn('open wa', e); }
         });
@@ -159,16 +238,31 @@
     }
 
     function speak(text){
+      // Clear any existing speech and speak the text in clear, paced chunks
       if(!('speechSynthesis' in window)) return;
-      const s = new SpeechSynthesisUtterance(String(text));
-      // prefer female voice if available
-      const voices = speechSynthesis.getVoices();
-      const preferred = voices.find(v => /female|woman|zira|susan|kendra/i.test(v.name)) || voices.find(v=>/en-US|english/i.test(v.lang)) || voices[0];
-      if(preferred) s.voice = preferred;
-      s.rate = 1;
-      s.pitch = 1;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(s);
+      function getPreferredVoice(regex){
+        const voices = speechSynthesis.getVoices() || [];
+        return voices.find(v=> regex.test(v.name)) || voices.find(v=> /en-US|en-GB|english/i.test(v.lang)) || voices[0] || null;
+      }
+      function speakChunks(fullText, voiceRegex, rate=0.95, pitch=1.0){
+        const sentences = fullText.match(/[^.!?]+[.!?]?/g) || [fullText];
+        let i = 0;
+        speechSynthesis.cancel();
+        const voice = getPreferredVoice(voiceRegex);
+        function next(){
+          if(i >= sentences.length) return;
+          const chunk = sentences[i].trim();
+          if(!chunk){ i++; return next(); }
+          const u = new SpeechSynthesisUtterance(chunk);
+          if(voice) u.voice = voice;
+          u.rate = rate; u.pitch = pitch; u.volume = 1.0;
+          u.onend = ()=>{ i++; setTimeout(next, 140); };
+          speechSynthesis.speak(u);
+        }
+        next();
+      }
+      // prefer a female voice if available, otherwise a clear English voice
+      speakChunks(String(text), /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i, 0.95, 1.0);
     }
 
     // Very small rule-based agent using keywords
@@ -304,20 +398,236 @@
     });
 
     document.getElementById('qrContact').addEventListener('click', ()=>{
-      const waUrl = 'https://wa.link/6199n8';
-      const r = `Opening WhatsApp chat for Elizade Toyota. If a new tab does not open, please click this link: ${waUrl}`;
-      appendMessage(r); speak(r);
-      try{ const nw = window.open(waUrl, '_blank'); if(!nw) appendMessage('Popup blocked. Please allow popups to open WhatsApp.'); }catch(e){ console.warn('open wa link error', e); }
-      // attempt to preload in hidden iframe (may be blocked by target headers)
-      try{
-        const id = 'bgChatFrame'; if(!document.getElementById(id)){
-          const iframe = document.createElement('iframe'); iframe.id = id; iframe.src = waUrl; iframe.style.position='absolute'; iframe.style.width='1px'; iframe.style.height='1px'; iframe.style.left='-9999px'; iframe.style.top='-9999px'; iframe.style.border='0';
-          iframe.onload = ()=> console.log('Background WhatsApp iframe loaded');
-          iframe.onerror = ()=> console.warn('Background WhatsApp iframe failed to load');
-          document.body.appendChild(iframe);
-          setTimeout(()=>{ try{ const doc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document); if(!doc) console.warn('WhatsApp iframe likely blocked or cross-origin'); }catch(err){ console.warn('iframe access error', err); } }, 1500);
-        }
-      }catch(err){ console.warn('preload wa iframe error', err); }
+      // Show Quick Fix troubleshooting instructions in chat and speak a short intro
+      const QUICK_FIX_TEXT = `Engine & Starting Issues
+
+1️⃣ Engine won’t start → Check battery, starter, immobilizer
+2️⃣ Car hard starting → Replace spark plugs, clean fuel injectors
+3️⃣ Engine misfire → Coil pack, spark plugs, fuel injector service
+4️⃣ Rough idle → Cleaning throttle body, idle control valve
+5️⃣ Engine knocking → Use correct fuel grade, check bearings
+6️⃣ Engine overheating → Refill coolant, inspect radiator fan/pump
+7️⃣ Low power pickup → Check air filter, fuel pump
+8️⃣ Car stalls while driving → Fuel delivery or electrical check
+9️⃣ Smoke from exhaust
+• White: coolant issue
+• Blue: oil burning
+• Black: rich fuel mixture
+🔧 Repairs based on color
+10️⃣ Check engine light → Scan OBD code to diagnose
+11️⃣ Fuel smell in cabin → Fix fuel leak and replace purge valve
+12️⃣ Oil leak → Replace gaskets, tighten drain plug
+13️⃣ Coolant leak → Replace radiator hose, water pump gasket
+14️⃣ Excessive fuel consumption → Tire pressure, cleaner injectors
+15️⃣ Radiator fan not working → Replace relay or fan motor
+16️⃣ Engine vibration → Change mounts, wheel balancing
+17️⃣ Timing belt noise → Replace belt/tensioner
+18️⃣ Car overheating in traffic → Fix fan or AC condenser congestion
+19️⃣ Slow acceleration → MAF sensor cleaning
+20️⃣ Engine backfire → Check ignition timing
+
+✅ Transmission / Gearbox
+
+21️⃣ Difficulty shifting → Change transmission fluid
+22️⃣ Gear slipping → Overhaul clutch or transmission
+23️⃣ Shaking when shifting → Bad mounts or clutch issues
+24️⃣ Delayed gear engagement → Check fluid level
+25️⃣ Transmission overheating → Cooling line repair
+
+✅ Electrical System
+
+26️⃣ Dim headlights → Battery or alternator diagnosis
+27️⃣ Warning lights all on → Alternator issue
+28️⃣ Dead key fob → Replace fob battery
+29️⃣ Power windows not working → Replace switches/motor
+30️⃣ Central lock failure → Actuator replacement
+31️⃣ Blown fuses → Check short circuit
+32️⃣ Radio not powering → Wiring or fuse
+33️⃣ Dashboard screen flicker → Loose connector
+34️⃣ Parking sensors beep constantly → Sensor cleaning/replacement
+35️⃣ AC not cooling → Gas refill or compressor repair
+
+✅ Battery & Starting System
+
+36️⃣ Car not cranking → Battery jumpstart or starter check
+37️⃣ Fast battery drainage → Alternator output test
+38️⃣ Corroded terminals → Clean terminals + anti-rust spray
+39️⃣ Starter clicking sound → Replace starter solenoid
+40️⃣ Key turns but no start → Ignition switch failure
+
+✅ Brake System
+
+41️⃣ Squeaking brakes → Replace brake pads
+42️⃣ Soft brake pedal → Bleed brake fluid
+43️⃣ ABS light on → Sensor replacement
+44️⃣ Car pulls when braking → Alignment or brake caliper service
+45️⃣ Brake vibration → Skim or replace brake disks
+
+✅ Suspension & Steering
+
+46️⃣ Steering wheel vibration → Wheel balancing
+47️⃣ Hard steering → Power steering fluid top-up
+48️⃣ Car drifting sideways → Wheel alignment
+49️⃣ Clunking noise over bumps → Replace bushings
+50️⃣ Steering fluid leak → Replace rack seals
+
+✅ Tires & Wheels
+
+51️⃣ Tire wear uneven → Alignment + rotation
+52️⃣ Frequent punctures → Check wheel rim damage
+53️⃣ Tire noise → Replace old tyres
+54️⃣ Wheel shake at high speed → Balance tyres
+55️⃣ TPMS light on → Inflate tires / sensor reset
+
+✅ Exhaust System
+
+56️⃣ Loud exhaust noise → Fix exhaust leak or muffler
+57️⃣ Sulfur smell → Replace catalytic converter
+58️⃣ Excessive emissions → Emission tune-up
+59️⃣ Exhaust smoke under acceleration → Turbo or piston rings
+60️⃣ Rattling exhaust → Tighten hangers
+
+✅ Air Conditioning & Climate
+
+61️⃣ AC weak → Clean condenser & cabin filter
+62️⃣ Hot air from AC → Refrigerant refill
+63️⃣ AC water leaks inside → Drain pipe unclog
+64️⃣ AC compressor noise → Replace clutch/compressor
+65️⃣ Foggy windows → Fix heater core
+
+✅ Fuel & Intake System
+
+66️⃣ Fuel pump failure → Replace pump module
+67️⃣ Dirty fuel injectors → Ultra-sonic injector cleaning
+68️⃣ Fuel tank leak → tank repair or replacement
+69️⃣ Hesitation on acceleration → Check throttle sensor
+70️⃣ Fuel gauge not reading → Replace fuel sending unit
+
+✅ Safety Systems
+
+71️⃣ Airbag light on → Sensor reset / clock spring
+72️⃣ Seatbelt won’t retract → Lubricate or replace retractor
+73️⃣ Traction control light → Wheel speed sensor
+74️⃣ Horn failure → Relay or horn pad fault
+75️⃣ Backup camera blur → Lens clean / camera replace
+
+✅ Body & Interior
+
+76️⃣ Window wind noise → Replace window seal
+77️⃣ Door lock jammed → Lubricate latch
+78️⃣ Sunroof leak → Rubber seal repair
+79️⃣ Interior lights dead → Fuse change
+80️⃣ Roof lining sagging → Re-glue upholstery
+
+✅ Technology Systems
+
+81️⃣ GPS not working → Update navigation software
+82️⃣ Bluetooth issues → Reset multimedia system
+83️⃣ Cruise control failure → Brake switch sensor
+84️⃣ Key won’t turn → Replace ignition cylinder
+85️⃣ Power seat stuck → Motor track fix
+
+✅ Noise & Vibrations
+
+86️⃣ Whining while turning → Low steering fluid
+87️⃣ Humming sound while driving → Wheel bearing
+88️⃣ Metallic noise when accelerating → Heat shield or CV joint
+89️⃣ Knocking while braking → Loose caliper bolts
+90️⃣ Clicking during turns → CV axle
+
+✅ Fluids & Maintenance
+
+91️⃣ Transmission leak → Seal replacement
+92️⃣ Brake fluid contamination → Full fluid flush
+93️⃣ Steering fluid low → Inspect hoses
+94️⃣ Dirty air filter → Replace every 10k km
+95️⃣ Spark plugs worn → Replace every 30–50k km
+
+✅ Other Mechanical Issues
+
+96️⃣ Belt squeal → Replace serpentine belt
+97️⃣ Water pump failure → Replace pump
+98️⃣ Overheating AC engine → Radiator fan check
+99️⃣ Car shakes while idle → Engine mount
+100️⃣ Strange burning smell → Electrical short / oil on engine
+
+✅ Quick Safety Rule
+
+If it affects brakes, steering, smoke, overheating, or fuel smell — STOP driving immediately and call roadside support.`;
+
+        // Split the guide into named sections and render them as collapsible entries with a TOC
+        const RAW_SECTIONS = [
+          { title: 'Engine & Starting Issues', text: `1️⃣ Engine won’t start → Check battery, starter, immobilizer\n2️⃣ Car hard starting → Replace spark plugs, clean fuel injectors\n3️⃣ Engine misfire → Coil pack, spark plugs, fuel injector service\n4️⃣ Rough idle → Cleaning throttle body, idle control valve\n5️⃣ Engine knocking → Use correct fuel grade, check bearings\n6️⃣ Engine overheating → Refill coolant, inspect radiator fan/pump\n7️⃣ Low power pickup → Check air filter, fuel pump\n8️⃣ Car stalls while driving → Fuel delivery or electrical check\n9️⃣ Smoke from exhaust\n• White: coolant issue\n• Blue: oil burning\n• Black: rich fuel mixture\n🔧 Repairs based on color\n10️⃣ Check engine light → Scan OBD code to diagnose\n11️⃣ Fuel smell in cabin → Fix fuel leak and replace purge valve\n12️⃣ Oil leak → Replace gaskets, tighten drain plug\n13️⃣ Coolant leak → Replace radiator hose, water pump gasket\n14️⃣ Excessive fuel consumption → Tire pressure, cleaner injectors\n15️⃣ Radiator fan not working → Replace relay or fan motor\n16️⃣ Engine vibration → Change mounts, wheel balancing\n17️⃣ Timing belt noise → Replace belt/tensioner\n18️⃣ Car overheating in traffic → Fix fan or AC condenser congestion\n19️⃣ Slow acceleration → MAF sensor cleaning\n20️⃣ Engine backfire → Check ignition timing` },
+          { title: 'Transmission / Gearbox', text: `21️⃣ Difficulty shifting → Change transmission fluid\n22️⃣ Gear slipping → Overhaul clutch or transmission\n23️⃣ Shaking when shifting → Bad mounts or clutch issues\n24️⃣ Delayed gear engagement → Check fluid level\n25️⃣ Transmission overheating → Cooling line repair` },
+          { title: 'Electrical System', text: `26️⃣ Dim headlights → Battery or alternator diagnosis\n27️⃣ Warning lights all on → Alternator issue\n28️⃣ Dead key fob → Replace fob battery\n29️⃣ Power windows not working → Replace switches/motor\n30️⃣ Central lock failure → Actuator replacement\n31️⃣ Blown fuses → Check short circuit\n32️⃣ Radio not powering → Wiring or fuse\n33️⃣ Dashboard screen flicker → Loose connector\n34️⃣ Parking sensors beep constantly → Sensor cleaning/replacement\n35️⃣ AC not cooling → Gas refill or compressor repair` },
+          { title: 'Battery & Starting System', text: `36️⃣ Car not cranking → Battery jumpstart or starter check\n37️⃣ Fast battery drainage → Alternator output test\n38️⃣ Corroded terminals → Clean terminals + anti-rust spray\n39️⃣ Starter clicking sound → Replace starter solenoid\n40️⃣ Key turns but no start → Ignition switch failure` },
+          { title: 'Brake System', text: `41️⃣ Squeaking brakes → Replace brake pads\n42️⃣ Soft brake pedal → Bleed brake fluid\n43️⃣ ABS light on → Sensor replacement\n44️⃣ Car pulls when braking → Alignment or brake caliper service\n45️⃣ Brake vibration → Skim or replace brake disks` },
+          { title: 'Suspension & Steering', text: `46️⃣ Steering wheel vibration → Wheel balancing\n47️⃣ Hard steering → Power steering fluid top-up\n48️⃣ Car drifting sideways → Wheel alignment\n49️⃣ Clunking noise over bumps → Replace bushings\n50️⃣ Steering fluid leak → Replace rack seals` },
+          { title: 'Tires & Wheels', text: `51️⃣ Tire wear uneven → Alignment + rotation\n52️⃣ Frequent punctures → Check wheel rim damage\n53️⃣ Tire noise → Replace old tyres\n54️⃣ Wheel shake at high speed → Balance tyres\n55️⃣ TPMS light on → Inflate tires / sensor reset` },
+          { title: 'Exhaust System', text: `56️⃣ Loud exhaust noise → Fix exhaust leak or muffler\n57️⃣ Sulfur smell → Replace catalytic converter\n58️⃣ Excessive emissions → Emission tune-up\n59️⃣ Exhaust smoke under acceleration → Turbo or piston rings\n60️⃣ Rattling exhaust → Tighten hangers` },
+          { title: 'Air Conditioning & Climate', text: `61️⃣ AC weak → Clean condenser & cabin filter\n62️⃣ Hot air from AC → Refrigerant refill\n63️⃣ AC water leaks inside → Drain pipe unclog\n64️⃣ AC compressor noise → Replace clutch/compressor\n65️⃣ Foggy windows → Fix heater core` },
+          { title: 'Fuel & Intake System', text: `66️⃣ Fuel pump failure → Replace pump module\n67️⃣ Dirty fuel injectors → Ultra-sonic injector cleaning\n68️⃣ Fuel tank leak → tank repair or replacement\n69️⃣ Hesitation on acceleration → Check throttle sensor\n70️⃣ Fuel gauge not reading → Replace fuel sending unit` },
+          { title: 'Safety Systems', text: `71️⃣ Airbag light on → Sensor reset / clock spring\n72️⃣ Seatbelt won’t retract → Lubricate or replace retractor\n73️⃣ Traction control light → Wheel speed sensor\n74️⃣ Horn failure → Relay or horn pad fault\n75️⃣ Backup camera blur → Lens clean / camera replace` },
+          { title: 'Body & Interior', text: `76️⃣ Window wind noise → Replace window seal\n77️⃣ Door lock jammed → Lubricate latch\n78️⃣ Sunroof leak → Rubber seal repair\n79️⃣ Interior lights dead → Fuse change\n80️⃣ Roof lining sagging → Re-glue upholstery` },
+          { title: 'Technology Systems', text: `81️⃣ GPS not working → Update navigation software\n82️⃣ Bluetooth issues → Reset multimedia system\n83️⃣ Cruise control failure → Brake switch sensor\n84️⃣ Key won’t turn → Replace ignition cylinder\n85️⃣ Power seat stuck → Motor track fix` },
+          { title: 'Noise & Vibrations', text: `86️⃣ Whining while turning → Low steering fluid\n87️⃣ Humming sound while driving → Wheel bearing\n88️⃣ Metallic noise when accelerating → Heat shield or CV joint\n89️⃣ Knocking while braking → Loose caliper bolts\n90️⃣ Clicking during turns → CV axle` },
+          { title: 'Fluids & Maintenance', text: `91️⃣ Transmission leak → Seal replacement\n92️⃣ Brake fluid contamination → Full fluid flush\n93️⃣ Steering fluid low → Inspect hoses\n94️⃣ Dirty air filter → Replace every 10k km\n95️⃣ Spark plugs worn → Replace every 30–50k km` },
+          { title: 'Other Mechanical Issues', text: `96️⃣ Belt squeal → Replace serpentine belt\n97️⃣ Water pump failure → Replace pump\n98️⃣ Overheating AC engine → Radiator fan check\n99️⃣ Car shakes while idle → Engine mount\n100️⃣ Strange burning smell → Electrical short / oil on engine` },
+          { title: 'Quick Safety Rule', text: `If it affects brakes, steering, smoke, overheating, or fuel smell — STOP driving immediately and call roadside support.` }
+        ];
+
+        // remove any existing quick fix container
+        const existing = document.getElementById('quickFixContainer'); if(existing) existing.remove();
+        const container = document.createElement('div'); container.id = 'quickFixContainer';
+        // create a TOC
+        const toc = document.createElement('div'); toc.className = 'quickfix-toc';
+        RAW_SECTIONS.forEach((s, i)=>{
+          const tbtn = document.createElement('button'); tbtn.textContent = s.title;
+          tbtn.addEventListener('click', ()=>{
+            const sid = 'qf-' + i; const sec = document.getElementById(sid);
+            if(!sec) return;
+            // collapse other sections
+            const all = container.querySelectorAll('.section-content');
+            all.forEach(c=>{ if(c !== sec.firstChild) c.style.maxHeight = '0px'; });
+            // expand the selected section
+            const content = sec.querySelector('.section-content') || sec.firstChild;
+            if(content){
+              content.style.maxHeight = (content.scrollHeight + 20) + 'px';
+              // scroll into view
+              sec.scrollIntoView({behavior:'smooth',block:'center'});
+              // read full cleaned text (remove numeric markers)
+              const fullText = (s.text||'').replace(/[0-9]+️⃣\s*/g,'').replace(/\r/g,'').trim();
+              speakWithFemale(fullText);
+            }
+          });
+          toc.appendChild(tbtn);
+        });
+        container.appendChild(toc);
+
+        // create collapsible sections without headers/toggles; TOC controls expansion
+        RAW_SECTIONS.forEach((s, i)=>{
+          const wrap = document.createElement('div'); wrap.className = 'section'; wrap.id = 'qf-' + i;
+          const content = document.createElement('div'); content.className = 'section-content';
+          // remove numeric markers like 1️⃣, 21️⃣ etc from displayed text
+          const cleaned = (s.text || '').replace(/[0-9]+️⃣\s*/g, '').replace(/\r/g,'').trim();
+          const pre = document.createElement('div'); pre.className = 'section-pre'; pre.textContent = cleaned;
+          content.appendChild(pre);
+
+          // clicking content will collapse it
+          content.addEventListener('click', ()=>{
+            if(content.style.maxHeight && content.style.maxHeight !== '0px'){
+              content.style.maxHeight = '0px';
+            }
+          });
+
+          wrap.appendChild(content);
+          container.appendChild(wrap);
+        });
+
+        // append to transcript at top
+        transcriptEl.prepend(container);
+        // let user know
+        speakWithFemale('Quick Fix guide added. Use the table of contents to jump to a section. Tap a section header to expand and hear a quick summary.');
     });
 
     document.getElementById('qrBook').addEventListener('click', ()=>{
@@ -354,23 +664,40 @@
 
     function speakWithFemale(text){
       if(!('speechSynthesis' in window)) return;
-      const speakNow = ()=>{
-        const s = new SpeechSynthesisUtterance(String(text));
-        const voices = speechSynthesis.getVoices() || [];
-        // Prefer female-sounding names commonly available
+      const speakNow = (txt)=>{
+        // use the same chunked speaker with a female-preference regex and slower rate for clarity
         const femaleRegex = /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i;
-        let preferred = voices.find(v=> femaleRegex.test(v.name));
-        if(!preferred) preferred = voices.find(v=> /en-US|en-GB|english/i.test(v.lang));
-        if(preferred) s.voice = preferred;
-        s.rate = 1; s.pitch = 1;
-        speechSynthesis.cancel(); speechSynthesis.speak(s);
+        // slightly slower rate and neutral pitch for clarity
+        const rate = 0.92;
+        const pitch = 1.0;
+        // split and speak in chunks
+        function getPreferredVoice(regex){
+          const voices = speechSynthesis.getVoices() || [];
+          return voices.find(v=> regex.test(v.name)) || voices.find(v=> /en-US|en-GB|english/i.test(v.lang)) || voices[0] || null;
+        }
+        function speakChunks(fullText){
+          const sentences = String(fullText).match(/[^.!?]+[.!?]?/g) || [String(fullText)];
+          let i = 0;
+          speechSynthesis.cancel();
+          const voice = getPreferredVoice(femaleRegex);
+          function next(){
+            if(i >= sentences.length) return;
+            const chunk = sentences[i].trim();
+            if(!chunk){ i++; return next(); }
+            const u = new SpeechSynthesisUtterance(chunk);
+            if(voice) u.voice = voice;
+            u.rate = rate; u.pitch = pitch; u.volume = 1.0;
+            u.onend = ()=>{ i++; setTimeout(next, 160); };
+            speechSynthesis.speak(u);
+          }
+          next();
+        }
+        speakChunks(txt);
       };
-      // voices may not be loaded immediately
       if((speechSynthesis.getVoices()||[]).length === 0){
-        speechSynthesis.onvoiceschanged = ()=> speakNow();
-        // also attempt after short delay
-        setTimeout(()=>{ if((speechSynthesis.getVoices()||[]).length) speakNow(); }, 250);
-      } else speakNow();
+        speechSynthesis.onvoiceschanged = ()=> speakNow(text);
+        setTimeout(()=>{ if((speechSynthesis.getVoices()||[]).length) speakNow(text); }, 300);
+      } else speakNow(text);
     }
 
     function playGreeting(){
