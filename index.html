@@ -7,53 +7,78 @@
   <title>Elizade Toyota Ai Assistant</title>
   <style>
     :root{--red:#d32f2f;--yellow:#f5c142;--white:#ffffff;--bg:#111}
-  body{font-family:Avenir, 'Nunito', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#220000 0%, #110000 100%);color:var(--white);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
-  .assistant{width:720px;border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.6);background:linear-gradient(180deg,var(--red),#8b0000)}
-  .header{padding:14px 18px;background:linear-gradient(90deg,var(--red),#b71c1c);display:flex;align-items:center;gap:14px;flex-direction:column}
-  .brand{display:flex;flex-direction:column;align-items:center;text-align:center}
-  .brand h2{margin:0;font-size:20px;color:var(--white)}
-  .brand p{margin:0;font-size:13px;color:rgba(255,255,255,0.95)}
-  .carousel{width:100%;max-width:680px;height:160px;border-radius:8px;overflow:hidden;margin-top:10px;position:relative;background:#000}
-  .carousel-inner{height:100%;display:flex;transition:transform 600ms ease;will-change:transform}
-  .carousel-inner img{flex:0 0 100%;width:100%;height:100%;min-width:100%;min-height:100%;object-fit:contain;display:block;padding:8px;box-sizing:border-box;background:#000;align-self:center}
-  .carousel-control{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
-  .carousel-control.prev{left:10px}
-  .carousel-control.next{right:10px}
-  .carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;display:flex;gap:8px}
-  .carousel-dots button{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,0.45);cursor:pointer}
-  .carousel-dots button.active{background:#fff}
-  .body{background:linear-gradient(180deg,#fff 0%, #fff 100%);color:#111;padding:16px;height:560px;display:flex;flex-direction:column}
-  .transcript{flex:1;overflow:auto;border-radius:10px;padding:12px;background:rgba(255,255,255,0.85);box-shadow:inset 0 1px 0 rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.06);color:#111;backdrop-filter: blur(6px)}
+    body{font-family:Avenir, 'Nunito', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:linear-gradient(180deg,#220000 0%, #110000 100%);color:var(--white);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .assistant{width:100%;max-width:720px;border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.6);background:linear-gradient(180deg,var(--red),#8b0000)}
+    .header{padding:14px 18px;background:linear-gradient(90deg,var(--red),#b71c1c);display:flex;align-items:center;gap:14px;flex-direction:column}
+    .brand{display:flex;flex-direction:column;align-items:center;text-align:center}
+    .brand h2{margin:0;font-size:clamp(18px,4vw,24px);color:var(--white)}
+    .brand p{margin:0;font-size:clamp(12px,2vw,15px);color:rgba(255,255,255,0.95)}
+    .carousel{width:100%;max-width:680px;height:160px;border-radius:8px;overflow:hidden;margin-top:10px;position:relative;background:#000}
+    .carousel-inner{height:100%;display:flex;transition:transform 600ms ease;will-change:transform}
+    .carousel-inner img{flex:0 0 100%;width:100%;height:100%;min-width:100%;min-height:100%;object-fit:contain;display:block;padding:8px;box-sizing:border-box;background:#000;align-self:center}
+    .carousel-control{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+    .carousel-control.prev{left:10px}
+    .carousel-control.next{right:10px}
+    .carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;display:flex;gap:8px}
+    .carousel-dots button{width:10px;height:10px;border-radius:50%;border:0;background:rgba(255,255,255,0.45);cursor:pointer}
+    .carousel-dots button.active{background:#fff}
+    .body{background:linear-gradient(180deg,#fff 0%, #fff 100%);color:#111;padding:clamp(8px,2vw,16px);height:560px;display:flex;flex-direction:column}
+    .transcript{flex:1;overflow:auto;border-radius:10px;padding:clamp(8px,2vw,12px);background:rgba(255,255,255,0.85);box-shadow:inset 0 1px 0 rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.06);color:#111;backdrop-filter: blur(6px)}
     .msg{margin:10px 0;display:flex;gap:10px;align-items:flex-end}
     .msg.user{justify-content:flex-end}
     .avatar{width:40px;height:40px;border-radius:10px;flex:0 0 40px;display:flex;align-items:center;justify-content:center;background:#fff;color:#b71c1c;font-weight:800}
-  .bubble{display:inline-block;padding:14px 16px;border-radius:14px;max-width:78%;box-shadow:0 6px 18px rgba(12,18,30,0.06);transform-origin:left bottom}
+    .bubble{display:inline-block;padding:clamp(10px,2vw,14px) clamp(12px,2vw,16px);border-radius:14px;max-width:78%;box-shadow:0 6px 18px rgba(12,18,30,0.06);transform-origin:left bottom}
     .bubble.bot{background:linear-gradient(90deg,var(--yellow),#ffd86b);color:#111}
     .bubble.user{background:#f1f5f9;color:#111}
+    /* thumbs-up removed */
+    .user-count{display:inline-flex;align-items:center;gap:6px}
+    .user-count #userNumber{font-weight:800;margin-left:4px}
+    /* user-thumb hover/focus removed */
+    /* admin button removed */
     .bubble.fade-in{animation:popIn 260ms ease}
-    @keyframes popIn{from{opacity:0;transform:scale(0.98) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)}}
+    @keyframes popIn{from{opacity:0;transform:scale(0.98) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)} }
     .chat-us{margin-left:8px;background:#25D366;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 12px rgba(37,211,102,0.18)}
     .controls{display:flex;gap:8px;margin-top:10px}
-  /* Quick Fix sections / TOC */
-  .quickfix-toc{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:rgba(255,255,255,0.92);border-radius:8px;margin-bottom:8px}
-  .quickfix-toc button{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:6px 8px;border-radius:8px;cursor:pointer}
-  .section{margin:8px 0}
-  .section-header{display:flex;align-items:center;gap:8px;cursor:pointer}
-  .section-title{font-weight:800}
-  .section-toggle{margin-left:auto;background:transparent;border:1px solid rgba(0,0,0,0.06);padding:4px 8px;border-radius:6px;cursor:pointer}
-  .section-content{overflow:hidden;max-height:0;transition:max-height 260ms ease;padding-top:6px}
-  .section-pre{white-space:pre-wrap;background:transparent;padding:6px;border-radius:6px;color:#111}
-  .hidden-container{display:flex;flex-direction:column;gap:6px;padding:8px 6px}
-  .hidden-msg{opacity:0.6;font-size:13px;color:#333;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);cursor:pointer}
-  .history-open .hidden-container{display:block}
-  /* hide overlay arrows on carousel */
-  .carousel-control{display:none}
-    .btn{flex:1;padding:12px;border-radius:12px;border:0;cursor:pointer;font-weight:800}
+    /* Quick Fix sections / TOC */
+    .quickfix-toc{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:rgba(255,255,255,0.92);border-radius:8px;margin-bottom:8px}
+    .quickfix-toc button{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:6px 8px;border-radius:8px;cursor:pointer}
+    .section{margin:8px 0}
+    .section-header{display:flex;align-items:center;gap:8px;cursor:pointer}
+    .section-title{font-weight:800}
+    .section-toggle{margin-left:auto;background:transparent;border:1px solid rgba(0,0,0,0.06);padding:4px 8px;border-radius:6px;cursor:pointer}
+    .section-content{overflow:hidden;max-height:0;transition:max-height 260ms ease;padding-top:6px}
+    .section-pre{white-space:pre-wrap;background:transparent;padding:6px;border-radius:6px;color:#111}
+    .hidden-container{display:flex;flex-direction:column;gap:6px;padding:8px 6px}
+    .hidden-msg{opacity:0.6;font-size:13px;color:#333;padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);cursor:pointer}
+    .history-open .hidden-container{display:block}
+    /* hide overlay arrows on carousel */
+    .carousel-control{display:none}
+    .btn{flex:1;padding:clamp(10px,2vw,12px);border-radius:12px;border:0;cursor:pointer;font-weight:800}
     .btn.mic{background:var(--white);color:#b71c1c}
     .btn.ask{background:var(--yellow);color:#111}
-    .note{font-size:12px;color:#222;margin-top:8px}
-  .footer{padding:12px 16px;background:#0b0b0b;color:rgba(255,255,255,0.95);font-size:13px;text-align:center}
-    .small{font-size:12px;color:rgba(0,0,0,0.6)}
+    .note{font-size:clamp(11px,2vw,12px);color:#222;margin-top:8px}
+    .footer{padding:clamp(10px,2vw,12px) clamp(12px,2vw,16px);background:#0b0b0b;color:rgba(255,255,255,0.95);font-size:clamp(12px,2vw,13px);text-align:center}
+    .small{font-size:clamp(11px,2vw,12px);color:rgba(0,0,0,0.6)}
+    /* overlay for enabling audio if blocked */
+    #speechOverlay{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999}
+    #speechOverlay .card{background:#111;color:#fff;padding:clamp(16px,4vw,20px);border-radius:10px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    #speechOverlay .card button{margin-top:10px;padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .assistant{max-width:98vw;}
+      .carousel{max-width:98vw;height:120px;}
+      .body{height:auto;min-height:420px;}
+    }
+    @media (max-width: 600px) {
+      .assistant{max-width:100vw;border-radius:0;box-shadow:none;}
+      .header{padding:8px 4vw;}
+      .carousel{height:80px;}
+      .body{padding:4vw;}
+      .transcript{padding:4vw;}
+      .footer{padding:8px 4vw;}
+      .btn{padding:10px 6px;}
+      .bubble{padding:10px 8px;}
+    }
   </style>
 </head>
 <body>
@@ -72,6 +97,8 @@
         <button id="qrParts" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Parts</button>
   <button id="qrBook" class="btn" style="background:#fff;color:#b71c1c;min-width:160px">Fleet Info</button>
   <button id="qrContact" class="btn" style="background:var(--yellow);color:#111;min-width:120px">Quick Fix</button>
+        
+        <!-- TTS controls removed -->
       </div>
       <div class="carousel" aria-hidden="false">
         <button class="carousel-control prev" aria-label="Previous">‹</button>
@@ -82,8 +109,8 @@
     </div>
     <div class="body">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
-        <button id="historyBtn" class="btn secondary" style="flex:0 0 auto">History (0)</button>
-        <div id="userCount" class="small" style="flex:0 0 auto">Users online: 1</div>
+        <!-- History button removed -->
+        <div id="userCount" class="small user-count" style="flex:0 0 auto;">Users: <span id="userNumber">1</span></div>
       </div>
       <div id="transcript" class="transcript" aria-live="polite">
         <div id="quickFixContainerHolder"></div>
@@ -96,9 +123,20 @@
         <input id="input" type="text" placeholder="Type your question (e.g. price of RAV4)" style="flex:1;padding:12px;border-radius:8px;border:1px solid #e6e6e6" />
         <button id="send" class="btn" style="background:#fff;color:#111">Send</button>
       </div>
-      <div class="note">Tip: Use the mic button to speak. Click responses to hear them again.</div>
+      <div class="note">Tip: Use the mic button to speak. Click responses to hear them again. If your browser blocks speech on load, click the <strong>Enable Speech</strong> button when prompted.</div>
     </div>
     <div class="footer">DEVELOPED BY I.TEC GLOBAL</div>
+  </div>
+
+  <!-- Overlay shown only when browser blocks speech autoplay; clicking will enable TTS by requesting user gesture -->
+  
+  <!-- Admin interface removed per request -->
+  <div id="speechOverlay" style="display:none" aria-hidden="true">
+    <div class="card" role="dialog" aria-modal="true" aria-label="Enable speech">
+      <div style="font-size:18px;font-weight:800">Enable Voice Guidance</div>
+      <div style="margin-top:8px;opacity:0.8">Click to allow the site to speak important information and greetings.</div>
+      <div style="margin-top:12px"><button id="enableSpeechBtn" style="background:var(--yellow);color:#111">Enable Speech</button></div>
+    </div>
   </div>
 
   <script>
@@ -132,19 +170,172 @@
       }
     };
 
+    // Quick Fix sections (extracted for searching as well as rendering)
+    const QUICK_FIX_SECTIONS = [
+      { title: 'Engine & Starting Issues', text: `Engine won’t start → Check battery, starter, immobilizer\nCar hard starting → Replace spark plugs, clean fuel injectors\nEngine misfire → Coil pack, spark plugs, fuel injector service\nRough idle → Cleaning throttle body, idle control valve\nEngine knocking → Use correct fuel grade, check bearings\nEngine overheating → Refill coolant, inspect radiator fan/pump\nLow power pickup → Check air filter, fuel pump\nCar stalls while driving → Fuel delivery or electrical check\nSmoke from exhaust → White: coolant, Blue: oil, Black: rich mixture\nCheck engine light → Scan OBD code to diagnose\nFuel smell in cabin → Fix fuel leak and replace purge valve\nOil leak → Replace gaskets, tighten drain plug\nCoolant leak → Replace radiator hose` },
+      { title: 'Transmission / Gearbox', text: `Difficulty shifting → Change transmission fluid\nGear slipping → Overhaul clutch or transmission\nShaking when shifting → Bad mounts or clutch issues\nDelayed gear engagement → Check fluid level\nTransmission overheating → Cooling line repair` },
+      { title: 'Electrical System', text: `Dim headlights → Battery or alternator diagnosis\nWarning lights all on → Alternator issue\nDead key fob → Replace fob battery\nPower windows not working → Replace switches/motor\nCentral lock failure → Actuator replacement\nBlown fuses → Check short circuit` },
+      { title: 'Battery & Starting System', text: `Car not cranking → Battery jumpstart or starter check\nFast battery drainage → Alternator output test\nCorroded terminals → Clean terminals + anti-rust spray\nStarter clicking sound → Replace starter solenoid` },
+      { title: 'Brake System', text: `Squeaking brakes → Replace brake pads\nSoft brake pedal → Bleed brake fluid\nABS light on → Sensor replacement` },
+      { title: 'Suspension & Steering', text: `Steering wheel vibration → Wheel balancing\nHard steering → Power steering fluid top-up\nCar drifting sideways → Wheel alignment` },
+      { title: 'Tires & Wheels', text: `Tire wear uneven → Alignment + rotation\nFrequent punctures → Check wheel rim damage` },
+      { title: 'Exhaust System', text: `Loud exhaust noise → Fix exhaust leak or muffler\nExcessive emissions → Emission tune-up` },
+      { title: 'Air Conditioning & Climate', text: `AC weak → Clean condenser & cabin filter\nHot air from AC → Refrigerant refill` },
+      { title: 'Fuel & Intake System', text: `Fuel pump failure → Replace pump module\nDirty fuel injectors → Ultra-sonic injector cleaning` },
+      { title: 'Safety Systems', text: `Airbag light on → Sensor reset / clock spring\nSeatbelt won’t retract → Lubricate or replace retractor` },
+      { title: 'Other Mechanical Issues', text: `Belt squeal → Replace serpentine belt\nWater pump failure → Replace pump\nOverheating AC engine → Radiator fan check` }
+    ];
+
+    // Message to show/speak when speech recognition didn't pick up audio
+    const NO_SOUND_MSG = `I didn't catch any sound, kindly speak again. Elizade Toyota is a trusted leader in Toyota vehicle sales and after-sales service in Nigeria. We provide brand-new Toyota models, genuine spare parts, certified maintenance, and tailored mobility solutions for individuals and corporate organizations. Our mission is simple: deliver reliable vehicles, exceptional customer care, and a seamless ownership experience.`;
+
     const transcriptEl = document.getElementById('transcript');
     const inputEl = document.getElementById('input');
     const sendBtn = document.getElementById('send');
     const micBtn = document.getElementById('mic');
     const askBtn = document.getElementById('ask');
+    const userCountEl = document.getElementById('userCount');
     const carouselInner = document.getElementById('carouselInner');
+    const ttsModeSelect = document.getElementById('ttsMode');
+    const ttsLangSelect = document.getElementById('ttsLang');
+    const ttsVoiceRefreshBtn = document.getElementById('ttsVoiceRefresh');
+
+    // Helper: populate native voices into console and ensure voiceschanged event fills in
+    function refreshNativeVoices(){
+      if(!('speechSynthesis' in window)) return;
+      const voices = speechSynthesis.getVoices() || [];
+      console.log('Native TTS voices:', voices.map(v=>`${v.name} (${v.lang})`));
+      // If ttsLangSelect has values, try to pick one present
+      const selectedLang = (ttsLangSelect && ttsLangSelect.value) || null;
+      if(selectedLang && voices.length){
+        const best = voices.find(v=> v.lang && v.lang.toLowerCase().startsWith(selectedLang.split('-')[0].toLowerCase()));
+        if(best){ console.log('Selected voice for', selectedLang, ':', best.name); }
+      }
+    }
+    if('speechSynthesis' in window){
+      // Trigger voice hydration early so we can play greeting quickly
+      speechSynthesis.onvoiceschanged = ()=> refreshNativeVoices();
+      refreshNativeVoices();
+      // Additional call to hydrate voices from UA
+      setTimeout(()=> refreshNativeVoices(), 300);
+    }
+    if(ttsVoiceRefreshBtn){ ttsVoiceRefreshBtn.addEventListener('click', ()=> refreshNativeVoices()); }
+    if(ttsModeSelect){ ttsModeSelect.addEventListener('change', ()=>{
+      // if offline selected, attempt to load meSpeak in background
+      if(ttsModeSelect.value === 'offline' && !window.meSpeak){
+        console.log('Attempting to preload meSpeak for offline TTS.');
+        loadMeSpeakAssetsGlobal((ttsLangSelect && ttsLangSelect.value) || 'en-US').then(()=>console.log('meSpeak loaded')).catch(e=>console.warn('meSpeak load failed', e));
+      }
+    }); }
+    if(ttsLangSelect){ ttsLangSelect.addEventListener('change', ()=>{
+      refreshNativeVoices();
+      // If offline mode is selected, try to preload meSpeak voice for the language
+      if(ttsModeSelect && ttsModeSelect.value === 'offline'){
+        loadMeSpeakAssetsGlobal(ttsLangSelect.value).then(()=>console.log('meSpeak voice preloaded')).catch(()=>{});
+      }
+    }); }
+
+    // Users counter: fetch persistent global count from API and increment by 4 on each page load
+    // You can edit USER_BASE_COUNT and USER_BASE_DATE as you like
+    const USER_BASE_COUNT = 7; // starting count (7 from today)
+    // Persist the anchor date (first start date). If not present, set the date to today
+    const USER_BASE_KEY = 'elizade_user_base_date';
+    // Force base date to today so user counts start from 7 on this client
+    let USER_BASE_DATE = new Date().toISOString().slice(0,10);
+    try{ localStorage.setItem(USER_BASE_KEY, USER_BASE_DATE); }catch(e){}
+    // reset local load increase (client-side) so counts start from 7
+    try{ localStorage.setItem(USER_LOAD_KEY, '0'); }catch(e){}
+    const USER_LOAD_KEY = 'elizade_user_load_increase';
+    const USER_FIRST_LOAD_KEY = 'elizade_has_loaded_once';
+    let userLoadIncrease = 0;
+    try{ userLoadIncrease = parseInt(localStorage.getItem(USER_LOAD_KEY) || '0', 10) || 0; }catch(e){ userLoadIncrease = 0; }
+    // increment by 4 on every page load except the very first time the site was loaded
+    try{
+      if(localStorage.getItem(USER_FIRST_LOAD_KEY) === '1'){
+        userLoadIncrease += 4; localStorage.setItem(USER_LOAD_KEY, String(userLoadIncrease));
+      } else { try{ localStorage.setItem(USER_FIRST_LOAD_KEY,'1'); }catch(e){} }
+    }catch(e){}
+
+    function computeUsersOnline(){
+      try{
+        const base = new Date(USER_BASE_DATE + 'T00:00:00');
+        const now = new Date();
+        let days = Math.floor((now - base) / 86400000);
+        if(isNaN(days) || days < 0) days = 0;
+        return USER_BASE_COUNT + (days * 7) + (userLoadIncrease || 0);
+      }catch(e){ return USER_BASE_COUNT; }
+    }
+    function updateUserCount(){
+      try{
+        const n = computeUsersOnline();
+        if(userCountEl) userCountEl.textContent = `Users: ${n}`;
+      }catch(e){ console.warn('updateUserCount error', e); }
+    }
+    function msToNextMidnight(){ const now = new Date(); const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1); return tomorrow - now; }
+    async function fetchGlobalCount(){
+      try{
+        const resp = await fetch('/api/users');
+        if(!resp.ok) throw new Error('no server response');
+        const data = await resp.json(); if(data && typeof data.count === 'number'){ if(userCountEl) userCountEl.textContent = `Users: ${data.count}`; }
+      }catch(e){ console.warn('Global count fetch failed', e); updateUserCount(); }
+    }
+    async function notifyServerLoad(){
+      try{ const resp = await fetch('/api/users/increment?value=4', { method: 'POST' }); const data = await resp.json(); if(data && typeof data.count === 'number'){ if(userCountEl) userCountEl.textContent = `Users: ${data.count}`; } }catch(e){ console.warn('Failed to notify server of page load', e); }
+    }
+    // Try server-side count first, fall back to local method
+    (async ()=>{ await fetchGlobalCount(); // increment server value by 4 and refresh
+      await notifyServerLoad(); // if server not available, updateUserCount will show local computed
+      // schedule a daily update at midnight and also refresh on load
+      setTimeout(()=>{ fetchGlobalCount(); setInterval(fetchGlobalCount, 24*3600*1000); }, msToNextMidnight());
+    })();
+
+    // Global meSpeak loader (for offline TTS) — tries local files first, then CDN
+    function loadMeSpeakAssetsGlobal(langKey){
+      return new Promise((resolve, reject)=>{
+        if(window.meSpeak) return resolve(window.meSpeak);
+        const scriptSrcLocal = 'assets/mespeak/mespeak.min.js';
+        const script = document.createElement('script'); script.src = scriptSrcLocal; script.async = true;
+        script.onload = ()=>{
+          try{ if(window.meSpeak && window.meSpeak.loadConfig){ window.meSpeak.loadConfig('assets/mespeak/mespeak_config.json'); } }catch(e){ console.warn('meSpeak config load failed', e); }
+          resolve(window.meSpeak);
+        };
+        script.onerror = ()=>{
+          const cdn = 'https://cdn.jsdelivr.net/npm/mespeak/mespeak.min.js';
+          const s2 = document.createElement('script'); s2.src = cdn; s2.async = true;
+          s2.onload = ()=>{ try{ if(window.meSpeak && window.meSpeak.loadConfig) window.meSpeak.loadConfig('https://cdn.jsdelivr.net/npm/mespeak/mespeak_config.json'); }catch(e){}; resolve(window.meSpeak); };
+          s2.onerror = ()=> reject(new Error('Failed to load meSpeak script')); document.head.appendChild(s2);
+        };
+        document.head.appendChild(script);
+      });
+    }
+
+    function speakOfflineGlobal(text, langCode){
+      return new Promise(async (resolve, reject)=>{
+        try{
+          const ms = await loadMeSpeakAssetsGlobal(langCode);
+          if(!ms) throw new Error('meSpeak not available');
+          const voiceMapping = {
+            'en': 'en/en.json', 'es': 'es/es.json', 'fr': 'fr/fr.json', 'de': 'de/de.json', 'it': 'it/it.json',
+            'yo': 'en/en.json', 'ha': 'en/en.json', 'ig': 'en/en.json'
+          };
+          const key = (langCode||'en-US').split('-')[0];
+          const voiceFile = (voiceMapping[key] || 'en/en.json');
+          try{ ms.loadVoice('assets/mespeak/voices/' + voiceFile ); }catch(e){ console.warn('Could not load local meSpeak voice, trying fallback'); }
+          try{ ms.speak(String(text), { amplitude: 100, wordgap: 1 }); resolve(true); }catch(e){ console.warn('meSpeak speak error', e); reject(e); }
+        }catch(err){ reject(err); }
+      });
+    }
 
     // Use the external image links provided by the user
     const CAR_IMAGES = [
       { local: 'assets/slide1.jpg', remote: 'https://www.dubicars.com/images/a8c76b/r_960x540/generations/generation_65b9560b5619b_jetour-traveler-8.jpg?6' },
       { local: 'assets/slide2.jpg', remote: 'https://toyotaconnect.co.za/wp-content/uploads/2022/07/Toyota_1stcar_slider_1440x600_03.jpg' },
       { local: 'assets/slide3.jpg', remote: 'https://us-tuna-sounds-images.voicemod.net/889de82f-55d3-4a05-8140-21a625fc229b-1666240948303.jpg' },
-      { local: 'assets/auto-repair.jpg', remote: 'https://wtop.com/wp-content/uploads/2018/11/auto-repair.jpg' }
+      { local: 'assets/auto-repair.jpg', remote: 'https://wtop.com/wp-content/uploads/2018/11/auto-repair.jpg' },
+      { local: 'assets/elizade-board-2.jpg', remote: 'https://elizade.net/tnl/wp-content/uploads/2018/10/elizade-board-2.jpg' },
+      { local: 'assets/timbu.png', remote: 'https://images.timbu.com/contents-560300af19ec4f0baf45b6540bb89c68/f2664780-998d-4bc2-ad82-1b39e77090b6.png' },
+      { local: 'assets/eli-1.jpg', remote: 'https://becconsultants.com/wp-content/uploads/2023/06/Eli-1.jpg' },
+      { local: 'assets/elizade-1-1.jpg', remote: 'https://elizade.net/tnl/wp-content/uploads/2018/11/elizade-1-1.jpg' }
     ];
 
     // build slides and dots
@@ -214,6 +405,7 @@
         b.textContent = text; b.title = 'Click to hear this message'; b.style.cursor='pointer';
         b.addEventListener('click', ()=> speak(text));
         wrap.appendChild(b);
+        // thumbs-up removed for user messages (feature removed)
       } else {
         // bot message: avatar + bubble + Chat Us button
         const av = document.createElement('div'); av.className = 'avatar';
@@ -229,6 +421,7 @@
           try{ const nw = window.open(WA_LINK, '_blank'); if(!nw) appendMessage('Popup blocked — please allow popups to start WhatsApp chat.'); }catch(e){ console.warn('open wa', e); }
         });
         content.appendChild(b); content.appendChild(btn);
+        // thumbs-up removed for bot messages (feature removed)
 
         wrap.appendChild(av); wrap.appendChild(content);
       }
@@ -237,36 +430,123 @@
       transcriptEl.scrollTop = transcriptEl.scrollHeight;
     }
 
-    function speak(text){
-      // Clear any existing speech and speak the text in clear, paced chunks
-      if(!('speechSynthesis' in window)) return;
-      function getPreferredVoice(regex){
+    // Unified speak function that supports native (speechSynthesis) and offline (meSpeak) TTS
+    async function speak(text){
+      // Prefer native for immediate speech; no UI controls show by default.
+      const mode = (document.getElementById('ttsMode') && document.getElementById('ttsMode').value) || 'native';
+      const lang = (document.getElementById('ttsLang') && document.getElementById('ttsLang').value) || 'en-US';
+      // Helper: check for a native voice for the language
+      function hasNativeVoice(langPrefix){
+        try{
+          const voices = speechSynthesis.getVoices() || [];
+          return voices.some(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix.toLowerCase().split('-')[0]));
+        }catch(e){ return false; }
+      }
+      function getPreferredNativeVoice(langPrefix, femaleRegex){
         const voices = speechSynthesis.getVoices() || [];
-        return voices.find(v=> regex.test(v.name)) || voices.find(v=> /en-US|en-GB|english/i.test(v.lang)) || voices[0] || null;
+        // prefer name matching female regex, then same lang, else first
+        const byName = voices.find(v => femaleRegex.test(v.name));
+        if(byName) return byName;
+        const byLang = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix.toLowerCase().split('-')[0]));
+        if(byLang) return byLang;
+        return voices[0] || null;
       }
-      function speakChunks(fullText, voiceRegex, rate=0.95, pitch=1.0){
-        const sentences = fullText.match(/[^.!?]+[.!?]?/g) || [fullText];
-        let i = 0;
-        speechSynthesis.cancel();
-        const voice = getPreferredVoice(voiceRegex);
-        function next(){
-          if(i >= sentences.length) return;
-          const chunk = sentences[i].trim();
-          if(!chunk){ i++; return next(); }
-          const u = new SpeechSynthesisUtterance(chunk);
-          if(voice) u.voice = voice;
-          u.rate = rate; u.pitch = pitch; u.volume = 1.0;
-          u.onend = ()=>{ i++; setTimeout(next, 140); };
-          speechSynthesis.speak(u);
+      async function speakNative(fullText, options = {}){
+        if(!('speechSynthesis' in window)) return Promise.reject(new Error('Native speechSynthesis not supported'));
+        const femaleRegex = /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i;
+        const rate = options.rate || 0.95; const pitch = options.pitch || 1.0;
+        function speakChunks(text, voice){
+          return new Promise((resolve)=>{
+            const sentences = String(text).match(/[^.!?]+[.!?]?/g) || [String(text)];
+            let i = 0; speechSynthesis.cancel();
+            let started = false;
+            function next(){
+              if(i >= sentences.length) return resolve();
+              const chunk = sentences[i].trim(); if(!chunk){ i++; return next(); }
+              const u = new SpeechSynthesisUtterance(chunk);
+              if(voice) u.voice = voice;
+              u.rate = rate; u.pitch = pitch; u.volume = 1.0;
+              u.onstart = ()=>{ if(!started){ started = true; resolve(); } };
+              u.onend = ()=>{ i++; setTimeout(next, 120); };
+              speechSynthesis.speak(u);
+            }
+            next();
+          });
         }
-        next();
+        const voice = getPreferredNativeVoice(lang, femaleRegex);
+        return await speakChunks(fullText, voice);
       }
-      // prefer a female voice if available, otherwise a clear English voice
-      speakChunks(String(text), /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i, 0.95, 1.0);
+      // meSpeak loader is available globally via loadMeSpeakAssetsGlobal
+      // speakOfflineGlobal handles offline speaking and is defined globally
+
+      const tryNative = (mode === 'native' || mode === 'auto');
+      const tryOffline = (mode === 'offline' || mode === 'auto');
+      const langCode = lang || 'en-US';
+      // prefer native if available and allowed
+      if(tryNative && 'speechSynthesis' in window && hasNativeVoice(langCode)){
+        try{
+          // If the native TTS doesn't begin quickly (likely blocked), timeout and let the fallback run
+          const startTimeoutMs = 400; // reduce to 400ms to detect blocked/native failures faster
+          const startTimeout = new Promise((_, reject) => setTimeout(()=> reject(new Error('TTS start timeout')), startTimeoutMs));
+          return await Promise.race([speakNative(text, { rate: 0.95, pitch: 1.0 }), startTimeout]);
+        }catch(err){
+          console.warn('Native TTS start error or timeout', err);
+          // continue to fallback
+        }
+      }
+      // fallback to offline meSpeak
+      if(tryOffline){
+        try{ return await speakOfflineGlobal(text, langCode); }catch(e){ console.warn('Offline meSpeak TTS failed', e); }
+      }
+      // last resort: try native with default voice even if language doesn't match
+      if('speechSynthesis' in window){
+        return speakNative(text, { rate: 0.95, pitch: 1.0 });
+      }
+      return Promise.reject(new Error('No available TTS method'));
+    }
+
+    // Simple relevance search helpers: tokenize and find best match in DB
+    function tokenize(s){ return (String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean)); }
+    function containsWord(text, word){ if(!text || !word) return false; const re = new RegExp('\\b' + word.replace(/[^a-z0-9]/gi,'') + '\\b','i'); return re.test(text); }
+    function findRelevantInfo(text){
+      if(!text) return null; const t = String(text||'').toLowerCase(); const tokens = tokenize(t);
+      // scoring
+      const scores = [];
+      // models
+      Object.keys(INFO.models).forEach(k=>{
+        let score = 0;
+        if(containsWord(t,k)) score += 6;
+        if(INFO.models[k].toLowerCase().includes(t)) score += 4;
+        // token matches in model description
+        tokens.forEach(tok=>{ if(INFO.models[k].toLowerCase().includes(tok)) score += 2; });
+        if(score > 0) scores.push({type:'model', key:k, score, text: INFO.models[k]});
+      });
+      // quickfix
+      QUICK_FIX_SECTIONS.forEach((s, idx)=>{
+        let score = 0; const full = (s.title + ' ' + s.text).toLowerCase();
+        tokens.forEach(tok=>{ if(full.includes(tok)) score += 2; });
+        if(containsWord(t, s.title.split(' ')[0])) score += 3;
+        if(score > 0) scores.push({type:'quickfix', key: s.title, score, text: s.text});
+      });
+      // highlights
+      INFO.highlights.forEach(h=>{
+        let score = 0; const full = h.toLowerCase(); tokens.forEach(tok=>{ if(full.includes(tok)) score += 2; });
+        if(score > 0) scores.push({type:'highlight', key: h, score, text: h});
+      });
+      // contact info
+      if(/contact|phone|call|support|email|whatsapp/.test(t)){
+        scores.push({type:'contact', key:'contact', score: 8, text: `You can reach Elizade Toyota at ${INFO.phone} or email ${INFO.email}. WhatsApp: ${INFO.phone}. Visit ${INFO.website} for online ordering.`});
+      }
+      if(!scores.length) return null;
+      // pick best score
+      scores.sort((a,b)=> b.score - a.score);
+      return scores[0];
     }
 
     // Very small rule-based agent using keywords
     function handleQuery(text){
+      // any user input should stop repeated greetings
+      userInteracted();
       const t = (text||'').toLowerCase();
       appendMessage(text, 'user');
 
@@ -321,14 +601,60 @@
         appendMessage(r); speak(r); return;
       }
 
+      // If previous rules didn't match, try finding a relevant info item from our data
+      const match = findRelevantInfo(t);
+      if(match){
+        if(match.type === 'model'){
+          appendMessage(match.text); speak(match.text); return;
+        }
+        if(match.type === 'quickfix'){
+          const cleaned = (match.text||'').replace(/[0-9]+️⃣\s*/g,''); appendMessage(cleaned); speak(cleaned); return;
+        }
+        if(match.type === 'highlight' || match.type === 'contact'){
+          appendMessage(match.text); speak(match.text); return;
+        }
+      }
       // fallback with short brand pitch
       const r = `Elizade Toyota has been Nigeria's trusted Toyota distributor for over 50 years. We offer genuine Toyota vehicles, nationwide service, and online ordering. Ask me about a model name, parts or how to book a test drive.`;
       appendMessage(r); speak(r);
     }
 
-    sendBtn.addEventListener('click', ()=>{ const v = inputEl.value.trim(); if(!v) return; handleQuery(v); inputEl.value=''; });
+    // Map recognized voice phrases to the same behavior as quick-reply buttons
+    function handleVoiceCommand(text){
+      // consider this a user interaction: stop the greeting loop
+      userInteracted();
+      if(!text) return false;
+      const t = (text||'').toLowerCase().trim();
+      // show the recognized phrase as the user's message
+      appendMessage(text, 'user');
+
+      // Website / Ask
+      if(/\b(website|site|web|open site|open website|go to site|go to website)\b/.test(t)){
+        try{ askBtn.click(); }catch(e){}; return true;
+      }
+      // Models
+      if(/\b(models?|car models|available models|which models|what models|cars|vehicles)\b/.test(t)){
+        try{ document.getElementById('qrModels').click(); }catch(e){}; return true;
+      }
+      // Parts
+      if(/\b(parts?|spare parts|spares|accessories|sparepart|spare-part|order parts)\b/.test(t)){
+        try{ document.getElementById('qrParts').click(); }catch(e){}; return true;
+      }
+      // Fleet info
+      if(/\b(fleet|fleet info|fleet solutions|fleet solution|corporate fleet|fleet desk)\b/.test(t)){
+        try{ document.getElementById('qrBook').click(); }catch(e){}; return true;
+      }
+      // Quick fix / Troubleshooting / Repair guide
+      if(/\b(quick fix|quickfix|troubleshoot|troubleshooting|trouble|fix|repair guide|repair)\b/.test(t)){
+        try{ document.getElementById('qrContact').click(); }catch(e){}; return true;
+      }
+      return false;
+    }
+
+    sendBtn.addEventListener('click', ()=>{ userInteracted(); const v = inputEl.value.trim(); if(!v) return; handleQuery(v); inputEl.value=''; });
     // Replace Ask behavior: open Elizade website and also try to load it in a hidden iframe (background)
     askBtn.addEventListener('click', ()=>{
+      userInteracted();
       try{
         const nw = window.open(INFO.website, '_blank');
         if(!nw) alert('Popup blocked. Please allow popups to open the website.');
@@ -371,15 +697,22 @@
       recognition.onend = ()=>{ recognizing = false; micBtn.textContent = '🎤 Hold to Speak'; micBtn.style.background = ''; };
       recognition.onresult = (ev)=>{
         const text = ev.results[0][0].transcript;
-        handleQuery(text);
+        // if recognition returned nothing, let user know and ask them to try again
+        if(!text || !text.trim()){ appendMessage(NO_SOUND_MSG); speak(NO_SOUND_MSG); return; }
+        // route common voice commands to the same handlers as the UI buttons
+        const routed = handleVoiceCommand(text);
+        if(!routed) handleQuery(text);
       };
-      recognition.onerror = (ev)=>{ console.warn('Speech recognition error', ev); appendMessage('Voice recognition error: ' + (ev.error || 'unknown')); };
+      recognition.onnomatch = ()=>{ appendMessage(NO_SOUND_MSG); speak(NO_SOUND_MSG); };
+      recognition.onerror = (ev)=>{ console.warn('Speech recognition error', ev); appendMessage(NO_SOUND_MSG); speak(NO_SOUND_MSG); };
     } else {
       micBtn.disabled = false; // keep enabled but show notice
     }
 
     // mic button — tap to start/stop
     micBtn.addEventListener('click', ()=>{
+      // user interacted
+      userInteracted();
       if(!recognition){ appendMessage('Voice input is not supported in this browser. Try Chrome or Edge.'); return; }
       if(recognizing){ recognition.stop(); }
       else{ recognition.start(); }
@@ -387,17 +720,20 @@
 
     // Quick-reply button handlers
     document.getElementById('qrModels').addEventListener('click', ()=>{
+      userInteracted();
       const list = Object.keys(INFO.models).map(m=> `${m.toUpperCase()}: ${INFO.models[m]}`).join('\n');
       const r = `Available models and ranges:\n${list}`;
       appendMessage(r); speak(r);
     });
 
     document.getElementById('qrParts').addEventListener('click', ()=>{
+      userInteracted();
       const r = `We provide genuine Toyota spare parts: brakes, oil filters, batteries, tyres, AC components, body parts and luxury accessories. You can order parts at ${INFO.website}/parts or tell me which part you need.`;
       appendMessage(r); speak(r);
     });
 
     document.getElementById('qrContact').addEventListener('click', ()=>{
+      userInteracted();
       // Show Quick Fix troubleshooting instructions in chat and speak a short intro
       const QUICK_FIX_TEXT = `Engine & Starting Issues
 
@@ -556,25 +892,7 @@
 If it affects brakes, steering, smoke, overheating, or fuel smell — STOP driving immediately and call roadside support.`;
 
         // Split the guide into named sections and render them as collapsible entries with a TOC
-        const RAW_SECTIONS = [
-          { title: 'Engine & Starting Issues', text: `1️⃣ Engine won’t start → Check battery, starter, immobilizer\n2️⃣ Car hard starting → Replace spark plugs, clean fuel injectors\n3️⃣ Engine misfire → Coil pack, spark plugs, fuel injector service\n4️⃣ Rough idle → Cleaning throttle body, idle control valve\n5️⃣ Engine knocking → Use correct fuel grade, check bearings\n6️⃣ Engine overheating → Refill coolant, inspect radiator fan/pump\n7️⃣ Low power pickup → Check air filter, fuel pump\n8️⃣ Car stalls while driving → Fuel delivery or electrical check\n9️⃣ Smoke from exhaust\n• White: coolant issue\n• Blue: oil burning\n• Black: rich fuel mixture\n🔧 Repairs based on color\n10️⃣ Check engine light → Scan OBD code to diagnose\n11️⃣ Fuel smell in cabin → Fix fuel leak and replace purge valve\n12️⃣ Oil leak → Replace gaskets, tighten drain plug\n13️⃣ Coolant leak → Replace radiator hose, water pump gasket\n14️⃣ Excessive fuel consumption → Tire pressure, cleaner injectors\n15️⃣ Radiator fan not working → Replace relay or fan motor\n16️⃣ Engine vibration → Change mounts, wheel balancing\n17️⃣ Timing belt noise → Replace belt/tensioner\n18️⃣ Car overheating in traffic → Fix fan or AC condenser congestion\n19️⃣ Slow acceleration → MAF sensor cleaning\n20️⃣ Engine backfire → Check ignition timing` },
-          { title: 'Transmission / Gearbox', text: `21️⃣ Difficulty shifting → Change transmission fluid\n22️⃣ Gear slipping → Overhaul clutch or transmission\n23️⃣ Shaking when shifting → Bad mounts or clutch issues\n24️⃣ Delayed gear engagement → Check fluid level\n25️⃣ Transmission overheating → Cooling line repair` },
-          { title: 'Electrical System', text: `26️⃣ Dim headlights → Battery or alternator diagnosis\n27️⃣ Warning lights all on → Alternator issue\n28️⃣ Dead key fob → Replace fob battery\n29️⃣ Power windows not working → Replace switches/motor\n30️⃣ Central lock failure → Actuator replacement\n31️⃣ Blown fuses → Check short circuit\n32️⃣ Radio not powering → Wiring or fuse\n33️⃣ Dashboard screen flicker → Loose connector\n34️⃣ Parking sensors beep constantly → Sensor cleaning/replacement\n35️⃣ AC not cooling → Gas refill or compressor repair` },
-          { title: 'Battery & Starting System', text: `36️⃣ Car not cranking → Battery jumpstart or starter check\n37️⃣ Fast battery drainage → Alternator output test\n38️⃣ Corroded terminals → Clean terminals + anti-rust spray\n39️⃣ Starter clicking sound → Replace starter solenoid\n40️⃣ Key turns but no start → Ignition switch failure` },
-          { title: 'Brake System', text: `41️⃣ Squeaking brakes → Replace brake pads\n42️⃣ Soft brake pedal → Bleed brake fluid\n43️⃣ ABS light on → Sensor replacement\n44️⃣ Car pulls when braking → Alignment or brake caliper service\n45️⃣ Brake vibration → Skim or replace brake disks` },
-          { title: 'Suspension & Steering', text: `46️⃣ Steering wheel vibration → Wheel balancing\n47️⃣ Hard steering → Power steering fluid top-up\n48️⃣ Car drifting sideways → Wheel alignment\n49️⃣ Clunking noise over bumps → Replace bushings\n50️⃣ Steering fluid leak → Replace rack seals` },
-          { title: 'Tires & Wheels', text: `51️⃣ Tire wear uneven → Alignment + rotation\n52️⃣ Frequent punctures → Check wheel rim damage\n53️⃣ Tire noise → Replace old tyres\n54️⃣ Wheel shake at high speed → Balance tyres\n55️⃣ TPMS light on → Inflate tires / sensor reset` },
-          { title: 'Exhaust System', text: `56️⃣ Loud exhaust noise → Fix exhaust leak or muffler\n57️⃣ Sulfur smell → Replace catalytic converter\n58️⃣ Excessive emissions → Emission tune-up\n59️⃣ Exhaust smoke under acceleration → Turbo or piston rings\n60️⃣ Rattling exhaust → Tighten hangers` },
-          { title: 'Air Conditioning & Climate', text: `61️⃣ AC weak → Clean condenser & cabin filter\n62️⃣ Hot air from AC → Refrigerant refill\n63️⃣ AC water leaks inside → Drain pipe unclog\n64️⃣ AC compressor noise → Replace clutch/compressor\n65️⃣ Foggy windows → Fix heater core` },
-          { title: 'Fuel & Intake System', text: `66️⃣ Fuel pump failure → Replace pump module\n67️⃣ Dirty fuel injectors → Ultra-sonic injector cleaning\n68️⃣ Fuel tank leak → tank repair or replacement\n69️⃣ Hesitation on acceleration → Check throttle sensor\n70️⃣ Fuel gauge not reading → Replace fuel sending unit` },
-          { title: 'Safety Systems', text: `71️⃣ Airbag light on → Sensor reset / clock spring\n72️⃣ Seatbelt won’t retract → Lubricate or replace retractor\n73️⃣ Traction control light → Wheel speed sensor\n74️⃣ Horn failure → Relay or horn pad fault\n75️⃣ Backup camera blur → Lens clean / camera replace` },
-          { title: 'Body & Interior', text: `76️⃣ Window wind noise → Replace window seal\n77️⃣ Door lock jammed → Lubricate latch\n78️⃣ Sunroof leak → Rubber seal repair\n79️⃣ Interior lights dead → Fuse change\n80️⃣ Roof lining sagging → Re-glue upholstery` },
-          { title: 'Technology Systems', text: `81️⃣ GPS not working → Update navigation software\n82️⃣ Bluetooth issues → Reset multimedia system\n83️⃣ Cruise control failure → Brake switch sensor\n84️⃣ Key won’t turn → Replace ignition cylinder\n85️⃣ Power seat stuck → Motor track fix` },
-          { title: 'Noise & Vibrations', text: `86️⃣ Whining while turning → Low steering fluid\n87️⃣ Humming sound while driving → Wheel bearing\n88️⃣ Metallic noise when accelerating → Heat shield or CV joint\n89️⃣ Knocking while braking → Loose caliper bolts\n90️⃣ Clicking during turns → CV axle` },
-          { title: 'Fluids & Maintenance', text: `91️⃣ Transmission leak → Seal replacement\n92️⃣ Brake fluid contamination → Full fluid flush\n93️⃣ Steering fluid low → Inspect hoses\n94️⃣ Dirty air filter → Replace every 10k km\n95️⃣ Spark plugs worn → Replace every 30–50k km` },
-          { title: 'Other Mechanical Issues', text: `96️⃣ Belt squeal → Replace serpentine belt\n97️⃣ Water pump failure → Replace pump\n98️⃣ Overheating AC engine → Radiator fan check\n99️⃣ Car shakes while idle → Engine mount\n100️⃣ Strange burning smell → Electrical short / oil on engine` },
-          { title: 'Quick Safety Rule', text: `If it affects brakes, steering, smoke, overheating, or fuel smell — STOP driving immediately and call roadside support.` }
-        ];
+        const RAW_SECTIONS = QUICK_FIX_SECTIONS;
 
         // remove any existing quick fix container
         const existing = document.getElementById('quickFixContainer'); if(existing) existing.remove();
@@ -631,6 +949,7 @@ If it affects brakes, steering, smoke, overheating, or fuel smell — STOP drivi
     });
 
     document.getElementById('qrBook').addEventListener('click', ()=>{
+      userInteracted();
       // Fleet info quick response
       const msg = `Fleet Solutions — Designed for organizations with multiple vehicles, enabling them to optimize cost, improve safety, and extend vehicle lifespan.`;
       appendMessage(msg); speak(msg);
@@ -655,62 +974,189 @@ If it affects brakes, steering, smoke, overheating, or fuel smell — STOP drivi
 
     // Greeting messages - pick one at random and read it aloud (prefer female voice)
     const GREETINGS = [
-      `You\u2019re in safe hands with Elizade Toyota. I\'m here to help you find the right Toyota, maintain your vehicle, or get support anytime. How can I serve you today?`,
-      `Welcome to Elizade Toyota \u2014 where your journey matters. I\'m here to guide you with the perfect Toyota, genuine parts, and expert support.`,
-      `Thanks for choosing Elizade Toyota!  Whether you\'d like to explore new cars, book service, or request pricing \u2014 I\'ve got you covered. What can I do for you today?`
+      `Welcome to Elizade Toyota — your trusted gateway to comfort, safety, and innovation. How may I assist you today?`,
+      `Hello! This is Elizade Toyota's Smart Assistant. Ready to explore a Toyota or get support?`,
+      `Good day! You're connected to Elizade Toyota AI Support. What can I help you find?`,
+      `Welcome to Elizade Toyota — Where quality meets trust. How may I serve you today?`,
+      `Hi there! You're speaking with Elizade Toyota's digital assistant. Ready to experience Toyota excellence?`,
+      `Welcome to Elizade Toyota — crafted for comfort, engineered for performance. How may I elevate your journey today?`,
+      `Greetings! Step into the world of premium Toyota excellence. What would you like to explore?`,
+      `Hello and welcome to Elizade Toyota, where every ride is a class of its own. How can I assist?`,
+      `Hi! I'm your Elizade Toyota Assistant. Looking for a car, service, or quick info? I've got you!`,
+      `Hey there! Ready to discover your next Toyota? I can help.`,
+      `Hello! What can I help you with today — prices, servicing, test drive bookings or car options?`,
+      `Welcome to Elizade Toyota Sales! Would you like to check prices, compare models, or book a test drive?`,
+      `Good day! Searching for a Toyota that matches your lifestyle? Let's find your perfect fit.`,
+      `Hello! Ready to explore Toyota's latest models and deals? I'm here to guide you.`,
+      `Welcome to Elizade Toyota Service Centre. How can I assist with your vehicle today?`,
+      `Good day! Need maintenance, diagnostics, or repair booking? I'm ready to help.`,
+      `Hi! Elizade Toyota after-sales support here. Tell me your vehicle concern, and I'll guide you.`,
+      `Welcome to Elizade Toyota Fleet Intelligence. How may I assist your organization today?`,
+      `Greetings! Accessing fleet insights, health reports, or leasing options? I'm ready to support you.`,
+      `Hello! This is Elizade Toyota Corporate Suite. Let's optimize your fleet operations together.`,
+      `Welcome to Elizade Toyota Fleet Desk — smarter tracking, lower downtime, stronger performance. How can I help?`,
+      `Hello! I'm Elizade Toyota's AI Agent — optimized to help you choose, maintain, and enjoy your Toyota.`,
+      `Welcome! Powered by smart intelligence, I can help you find cars, view prices, book service, or explore fleet tools.`,
+      `Hi! You're connected to Elizade Toyota's smart assistant. What would you like to do today?`,
+      `Welcome to Elizade Toyota — your trusted gateway to comfort, safety, and innovation. How may I assist you today?`,
+      `Hello! This is Elizade Toyota's Smart Assistant. Ready to explore a Toyota or get support?`,
+      `Good day! You're connected to Elizade Toyota AI Support. What can I help you find?`,
+      `Welcome to Elizade Toyota — Where quality meets trust. How may I serve you today?`,
+      `Hi there! You're speaking with Elizade Toyota's digital assistant. Ready to experience Toyota excellence?`,
+      `Welcome to Elizade Toyota — crafted for comfort, engineered for performance. How may I elevate your journey today?`,
+      `Greetings! Step into the world of premium Toyota excellence. What would you like to explore?`,
+      `Hello and welcome to Elizade Toyota, where every ride is a class of its own. How can I assist?`,
+      `Hi! I'm your Elizade Toyota Assistant. Looking for a car, service, or quick info? I've got you!`,
+      `Hey there! Ready to discover your next Toyota? I can help.`,
+      `Hello! What can I help you with today — prices, servicing, test drive bookings or car options?`,
+      `Welcome to Elizade Toyota Sales! Would you like to check prices, compare models, or book a test drive?`,
+      `Good day! Searching for a Toyota that matches your lifestyle? Let's find your perfect fit.`,
+      `Hello! Ready to explore Toyota's latest models and deals? I'm here to guide you.`,
+      `Welcome to Elizade Toyota Service Centre. How can I assist with your vehicle today?`,
+      `Good day! Need maintenance, diagnostics, or repair booking? I'm ready to help.`,
+      `Hi! Elizade Toyota after-sales support here. Tell me your vehicle concern, and I'll guide you.`,
+      `Welcome to Elizade Toyota Fleet Intelligence. How may I assist your organization today?`,
+      `Greetings! Accessing fleet insights, health reports, or leasing options? I'm ready to support you.`,
+      `Hello! This is Elizade Toyota Corporate Suite. Let's optimize your fleet operations together.`,
+      `Welcome to Elizade Toyota Fleet Desk — smarter tracking, lower downtime, stronger performance. How can I help?`,
+      `Hello! I'm Elizade Toyota's AI Agent — optimized to help you choose, maintain, and enjoy your Toyota.`,
+      `Welcome! Powered by smart intelligence, I can help you find cars, view prices, book service, or explore fleet tools.`,
+      `Hi! You're connected to Elizade Toyota's smart assistant. What would you like to do today?`
     ];
 
     function getRandomGreeting(){ return GREETINGS[Math.floor(Math.random()*GREETINGS.length)]; }
 
     function speakWithFemale(text){
-      if(!('speechSynthesis' in window)) return;
-      const speakNow = (txt)=>{
-        // use the same chunked speaker with a female-preference regex and slower rate for clarity
-        const femaleRegex = /female|woman|zira|susan|kendra|amy|samantha|olivia|emma|zoe|zira|alexa/i;
-        // slightly slower rate and neutral pitch for clarity
-        const rate = 0.92;
-        const pitch = 1.0;
-        // split and speak in chunks
-        function getPreferredVoice(regex){
-          const voices = speechSynthesis.getVoices() || [];
-          return voices.find(v=> regex.test(v.name)) || voices.find(v=> /en-US|en-GB|english/i.test(v.lang)) || voices[0] || null;
-        }
-        function speakChunks(fullText){
-          const sentences = String(fullText).match(/[^.!?]+[.!?]?/g) || [String(fullText)];
-          let i = 0;
-          speechSynthesis.cancel();
-          const voice = getPreferredVoice(femaleRegex);
-          function next(){
-            if(i >= sentences.length) return;
-            const chunk = sentences[i].trim();
-            if(!chunk){ i++; return next(); }
-            const u = new SpeechSynthesisUtterance(chunk);
-            if(voice) u.voice = voice;
-            u.rate = rate; u.pitch = pitch; u.volume = 1.0;
-            u.onend = ()=>{ i++; setTimeout(next, 160); };
-            speechSynthesis.speak(u);
-          }
-          next();
-        }
-        speakChunks(txt);
-      };
-      if((speechSynthesis.getVoices()||[]).length === 0){
-        speechSynthesis.onvoiceschanged = ()=> speakNow(text);
-        setTimeout(()=>{ if((speechSynthesis.getVoices()||[]).length) speakNow(text); }, 300);
-      } else speakNow(text);
+      // delegate to speak(); speak() will use the selected ttsMode and ttsLang
+      try{ return speak(text); }catch(e){ return Promise.reject(e); }
+    }
+
+    // Greeting loop helpers
+    let greetingIntervalId = null;
+    function isSpeakingNow(){
+      try{ if('speechSynthesis' in window && speechSynthesis.speaking) return true; }catch(e){}
+      // If we need to detect meSpeak playback we could track a flag; for now, prefer native check
+      return false;
+    }
+    function startGreetingLoop(){
+      // start only if not started already
+      if(greetingIntervalId) return;
+      // run every 7 seconds
+      greetingIntervalId = setInterval(()=>{
+        // only play greeting if there's no current user input or TTS in progress
+        if(isSpeakingNow()) return; // skip if something already speaking
+        playGreeting();
+      }, 7000);
+    }
+    function stopGreetingLoop(){
+      if(!greetingIntervalId) return;
+      clearInterval(greetingIntervalId); greetingIntervalId = null;
+    }
+    function userInteracted(){
+      stopGreetingLoop();
+      // optionally cancel any queued TTS (avoid overlapping greetings)
+      try{ if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){}
+      try{ if(window.meSpeak && typeof window.meSpeak.stop === 'function') window.meSpeak.stop(); }catch(e){}
     }
 
     function playGreeting(){
       const g = getRandomGreeting();
       appendMessage(g, 'bot');
-      speakWithFemale(g);
+      console.log('playGreeting: about to attempt TTS for greeting');
+      console.log('playGreeting: chosen greeting ->', g);
+      // Force voice loading and speak as soon as possible
+      if('speechSynthesis' in window){
+        let voices = speechSynthesis.getVoices();
+        if(!voices || voices.length === 0){
+          // Try to trigger voiceschanged by creating a dummy utterance
+          const dummy = new SpeechSynthesisUtterance('');
+          // Speak dummy silently if allowed, else it will queue the voiceschanged event
+          try{ speechSynthesis.speak(dummy); }catch(e){}
+          setTimeout(()=>{
+            voices = speechSynthesis.getVoices();
+            // Attempt to speak with the native TTS; use faster detection
+            speakWithFemale(g).then(()=>{ console.log('playGreeting: TTS started'); }).catch((err)=>{
+              const overlayEl = document.getElementById('speechOverlay'); if(overlayEl) overlayEl.style.display = 'flex';
+              console.warn('Autoplay TTS blocked or no voices: ', err);
+            });
+          }, 400);
+        } else {
+          speakWithFemale(g).then(()=>{ console.log('playGreeting: TTS started'); }).catch((err)=>{
+            const overlayEl = document.getElementById('speechOverlay'); if(overlayEl) overlayEl.style.display = 'flex';
+            console.warn('Autoplay TTS blocked or no voices: ', err);
+          });
+        }
+      } else {
+        speakWithFemale(g).then(()=>{ console.log('playGreeting: TTS started'); }).catch((err)=>{
+          const overlayEl = document.getElementById('speechOverlay'); if(overlayEl) overlayEl.style.display = 'flex';
+          console.warn('Autoplay TTS blocked or no voices: ', err);
+        });
+      }
     }
 
-    // Play greeting immediately on load
-    playGreeting();
+    // Wire overlay enable button — user gesture fallback when autoplay blocked
+    (function wireEnableSpeechOverlay(){
+      const overlayEl = document.getElementById('speechOverlay');
+      const enableSpeechBtn = document.getElementById('enableSpeechBtn');
+      if(!enableSpeechBtn) return;
+      enableSpeechBtn.addEventListener('click', ()=>{
+        try{ if(window.AudioContext || window.webkitAudioContext){ const AC = window.AudioContext || window.webkitAudioContext; const actx = new AC(); if(actx.state === 'suspended') actx.resume(); }}catch(e){ console.warn('AudioContext resume failed', e); }
+        // hide overlay and try greeting again
+        if(overlayEl) { overlayEl.style.display = 'none'; }
+        try{ playGreeting(); }catch(e){ console.warn('playGreeting after overlay click failed', e); }
+      });
+    })();
+
+    // Initialize TTS: try to preload voices and play greeting immediately if possible.
+    function initTTS(){
+      if(!('speechSynthesis' in window)){
+        // No native TTS - show overlay to inform user
+        const overlayEl = document.getElementById('speechOverlay'); if(overlayEl) overlayEl.style.display = 'flex';
+        return;
+      }
+      // Refresh voice list
+      refreshNativeVoices();
+      const tryPlay = ()=>{
+        const voices = speechSynthesis.getVoices() || [];
+        if(voices.length > 0){
+          // Voices present - play greeting
+          playGreeting();
+        } else {
+          // Attempt to trigger voiceschanged by speaking a silent utterance, then check again quickly
+          try{ speechSynthesis.speak(new SpeechSynthesisUtterance('')); }catch(e){}
+          setTimeout(()=>{
+            const updated = speechSynthesis.getVoices() || [];
+            if(updated.length > 0) playGreeting();
+            else {
+              // could not hydrate voices - try to play greeting (may be blocked) and show overlay on failure
+              playGreeting();
+              // show overlay after short delay if nothing starts
+              setTimeout(()=>{
+                const overlayEl = document.getElementById('speechOverlay'); if(overlayEl) overlayEl.style.display = 'flex';
+              }, 600);
+            }
+          }, 350);
+        }
+      };
+      tryPlay();
+      // start the background greeting loop (plays a greeting every 7s until user input is detected)
+      startGreetingLoop();
+    }
+
+    // Initialize TTS and greeting
+    initTTS();
+    // Also bind on DOMContentLoaded to ensure we initialize TTS early on page navigation
+    document.addEventListener('DOMContentLoaded', ()=>{ try{ initTTS(); }catch(e){} });
+
+    // Admin panel interactions
+    // Admin UI removed. No admin token or admin-only endpoints used in this front-end.
+
+    // thumbs-up removed: header click handler removed to prevent server or local increment via header icon
 
     // Accessibility: allow Enter to send
     inputEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendBtn.click(); } });
+    // Ensure header user number is updated when local updateUserCount is called
+    (function watchLocalUserCount(){ const original = updateUserCount; updateUserCount = function(){ original(); const el = document.getElementById('userNumber'); if(el && userCountEl){ const txt = userCountEl.textContent || ''; const m = txt.match(/Users:\s*(\d+)/); if(m) el.textContent = m[1]; } }; })();
   </script>
 </body>
 </html>
